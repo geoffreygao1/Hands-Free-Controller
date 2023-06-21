@@ -1,6 +1,6 @@
 import * as faceapi from 'face-api.js';
 import React from 'react';
-import Webcam from "react-webcam";
+// import Webcam from "react-webcam";
 import Header from './Header';
 
 function App() {
@@ -69,12 +69,12 @@ function App() {
     }, 100)
   }
 
-  //Handle stop webcam
-  const closeWebcam = () => {
-    videoRef.current.pause();
-    videoRef.current.srcObject.getTracks()[0].stop();
-    setCaptureVideo(false);
-  }
+  // //Handle stop webcam
+  // const closeWebcam = () => {
+  //   videoRef.current.pause();
+  //   videoRef.current.srcObject.getTracks()[0].stop();
+  //   setCaptureVideo(false);
+  // }
 
   return (
     <React.Fragment>

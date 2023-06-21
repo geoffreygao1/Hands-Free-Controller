@@ -35,3 +35,4 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Wednesday 06/21/23
 * _10:00AM Initialized React app, playing around with implementing FaceAPI.js_
+* _2:00PM Added landmark parsing (eyes, nose, mouth) and display_

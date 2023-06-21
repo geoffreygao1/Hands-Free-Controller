@@ -67,8 +67,11 @@ function App() {
         canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 
         //Output points
-        var landmarksOutput = resizedDetections[0]['landmarks']._positions;
-        console.log(landmarksOutput);
+        if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length == 68) {
+          var landmarksOutput = resizedDetections[0]['landmarks']._positions;
+          console.log(landmarksOutput);
+        }
+
         // const mouth = detections.getMouth();
         // const leftEye = detections.getLeftEye();
         // const rightEye = detections.getRightEye();

@@ -9,6 +9,12 @@ function App() {
   const [modelsLoaded, setModelsLoaded] = React.useState(false);
   const [captureVideo, setCaptureVideo] = React.useState(false);
 
+  //States for face coordinates
+  const [leftEyeCoordinate, setleftEyeCoordinate] = React.useState([]);
+  const [rightEyeCoordinate, setrightEyeCoordinate] = React.useState([]);
+  const [noseCoordinate, setnoseCoordinate] = React.useState([]);
+  const [mouthCoordinate, setmouthCoordinate] = React.useState([]);
+
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
   const videoHeight = 240;
@@ -69,6 +75,10 @@ function App() {
         //Output points
         if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length == 68) {
           var landmarksOutput = resizedDetections[0]['landmarks']._positions;
+          setleftEyeCoordinate(landmarksOutput[20]);
+          setrightEyeCoordinate(landmarksOutput[25]);
+          setnoseCoordinate(landmarksOutput[31]);
+          setmouthCoordinate(landmarksOutput[58]);
           console.log(landmarksOutput);
         }
 
@@ -106,6 +116,20 @@ function App() {
             </>
         }
       </div >
+      <h3>Coordinate Tracker</h3>
+      <div>
+        Left Eye:[{Number.parseFloat(leftEyeCoordinate._x).toFixed(1)},{Number.parseFloat(leftEyeCoordinate._y).toFixed(1)}]
+      </div>
+      <div>
+        Right Eye: [{Number.parseFloat(rightEyeCoordinate._x).toFixed(1)},{Number.parseFloat(rightEyeCoordinate._y).toFixed(1)}]
+      </div>
+      <div>
+        Nose: [{Number.parseFloat(noseCoordinate._x).toFixed(1)},{Number.parseFloat(noseCoordinate._y).toFixed(1)}]
+      </div>
+      <div>
+        Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
+      </div>
+
     </React.Fragment>
 
   );

@@ -23,6 +23,13 @@ _MIT_
 Copyright (c) _2023_ _Geoffrey Gao_
 
 ## Research & Planning Log
+
+### _Near Term To Do List:_
+  * _Improve face interpretation for movement_
+  * _Clean up state, currently too many vairables_
+  * _Mouth Open Close_
+  * _HTML element interact_
+
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_
 * _11:00AM Created Capstone Proposal_
@@ -38,7 +45,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
 * _2:00PM Added landmark parsing (eyes, nose, mouth) and display_
 
 #### Thursday 06/22/23
-* _Added face directionality relative to center_
+* _6:00PM Added face directionality relative to center_
 
 #### Friday 06/23/23
-* _Added cursor that moves relative to webcam input_
+* _11:00AM Added cursor that moves relative to webcam input_

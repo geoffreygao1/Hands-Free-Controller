@@ -47,6 +47,11 @@ h3 {
   color: white;
 }
 
+video,
+canvas {
+  transform: rotateY(180deg);
+}
+
 .deadzone {
   height: 20px;
   width: 20px;
@@ -54,7 +59,14 @@ h3 {
   border-radius: 50%;
   position: absolute;
   top: 50%;
-  left: 10%;
   transform: translate(-50%, -50%);
   opacity: 0.3;
+}
+
+.cursor {
+  background-color: blue;
+  opacity: 50%;
+  position: absolute;
+  border-Radius: 50%;
+  transition: top 0.3s, left 0.3s;
 }

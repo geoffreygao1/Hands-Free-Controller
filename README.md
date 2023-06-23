@@ -39,3 +39,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Thursday 06/22/23
 * _Added face directionality relative to center_
+
+#### Friday 06/23/23
+* _Added cursor that moves relative to webcam input_

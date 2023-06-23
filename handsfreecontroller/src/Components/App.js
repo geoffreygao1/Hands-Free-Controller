@@ -2,6 +2,7 @@ import * as faceapi from 'face-api.js';
 import React from 'react';
 // import Webcam from "react-webcam";
 import Header from './Header';
+import './App.css';
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
   const [avgFacePosition, setavgFacePosition] = React.useState([]);
 
   //State for cursor control
+  const deadZone = 15;
+  const [distanceToCenter, setdistanceToCenter] = React.useState(0);
   const [cursorDirection, setCursorDirection] = React.useState(null)
 
   //Establish references for webcam and canvas
@@ -43,6 +46,7 @@ function App() {
   //Calculates average face position when face moves
   React.useEffect(() => {
     calculateAvgFacePosition();
+    processDirection();
   }, [noseCoordinate])
 
   //Handle initiate Webcam
@@ -111,15 +115,23 @@ function App() {
 
   //Calculate direction based on landmark coordinates and dead zone
   const processDirection = () => {
-    //Deadzone radius for directionality
-    const deadZone = 5;
     //Finds center of webcam input
     const canvasCenter = {
-      "x": videoHeight / 2,
-      "y": videoWidth / 2
+      "x": videoWidth / 2,
+      "y": videoHeight / 2
     }
+    const faceCenter = {
+      "x": avgFacePosition[0],
+      "y": avgFacePosition[1]
+    }
+    //Find distance from center and compare to deadzone
+    setdistanceToCenter(Math.sqrt(Math.pow((faceCenter.x - canvasCenter.x), 2) + Math.pow((faceCenter.y - canvasCenter.y), 2)));
 
-
+    if (distanceToCenter > deadZone) {
+      setCursorDirection("Out of Deadzone");
+    } else {
+      setCursorDirection("DeadZone");
+    }
   }
 
   // //Handle stop webcam
@@ -136,10 +148,11 @@ function App() {
         {
           captureVideo ?
             modelsLoaded ?
-              <div>
+              <div class="container">
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
                   <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                   <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+                  <span class="deadzone"></span>
                 </div>
               </div>
               :
@@ -152,6 +165,12 @@ function App() {
       <h3>Coordinate Tracker</h3>
       <div>
         Cursor Direction: {cursorDirection}
+      </div>
+      <div>
+        Center: {videoWidth / 2}, {videoHeight / 2}
+      </div>
+      <div>
+        Distance to Center: {Number.parseFloat(distanceToCenter).toFixed(0)}
       </div>
       {/* Eventually replace with coordinate tracking component */}
       <div>

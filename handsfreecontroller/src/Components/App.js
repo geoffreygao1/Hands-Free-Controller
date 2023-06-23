@@ -21,7 +21,7 @@ function App() {
   //State for cursor control
   const deadZone = 15;
   const [distanceToCenter, setdistanceToCenter] = React.useState(0);
-  const [cursorDirection, setCursorDirection] = React.useState(null)
+  const [cursorDirection, setCursorDirection] = React.useState([]);
 
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
@@ -124,13 +124,34 @@ function App() {
       "x": avgFacePosition[0],
       "y": avgFacePosition[1]
     }
-    //Find distance from center and compare to deadzone
-    setdistanceToCenter(Math.sqrt(Math.pow((faceCenter.x - canvasCenter.x), 2) + Math.pow((faceCenter.y - canvasCenter.y), 2)));
 
-    if (distanceToCenter > deadZone) {
-      setCursorDirection("Out of Deadzone");
-    } else {
-      setCursorDirection("DeadZone");
+    //Coordinate of average face point relative to center of canvas
+    const normalizedFaceCoordinate = {
+      "x": faceCenter.x - canvasCenter.x,
+      "y": faceCenter.y - canvasCenter.y
+    }
+    //Find distance from center and compare to deadzone
+    setdistanceToCenter(Math.sqrt(Math.pow((normalizedFaceCoordinate.x), 2) + Math.pow((normalizedFaceCoordinate.y), 2)));
+    const angle = (Math.atan2(normalizedFaceCoordinate.y, normalizedFaceCoordinate.x) * 180 / Math.PI);
+
+    if (distanceToCenter <= deadZone) {
+      setCursorDirection(["Deadzone", 0]);
+    } else if (angle > -112 && angle < -68) {
+      setCursorDirection(["Up", distanceToCenter]);
+    } else if (angle > -157 && angle < -113) {
+      setCursorDirection(["Up + Left", distanceToCenter]);
+    } else if (angle > 158 || angle < -158) {
+      setCursorDirection(["Left", distanceToCenter]);
+    } else if (angle > 113 && angle < 157) {
+      setCursorDirection(["Down + Left", distanceToCenter]);
+    } else if (angle > 68 && angle < 112) {
+      setCursorDirection(["Down", distanceToCenter]);
+    } else if (angle > 23 && angle < 67) {
+      setCursorDirection(["Down Right", distanceToCenter]);
+    } else if (angle > -22 && angle < 22) {
+      setCursorDirection(["Right", distanceToCenter]);
+    } else if (angle > -67 && angle < -23) {
+      setCursorDirection(["Up Right", distanceToCenter]);
     }
   }
 
@@ -164,19 +185,19 @@ function App() {
       </div >
       <h3>Coordinate Tracker</h3>
       <div>
-        Cursor Direction: {cursorDirection}
+        Cursor Direction: {cursorDirection[0]}, Magnitude: {Number.parseFloat(cursorDirection[1]).toFixed(0)}
       </div>
       <div>
         Center: {videoWidth / 2}, {videoHeight / 2}
       </div>
-      <div>
-        Distance to Center: {Number.parseFloat(distanceToCenter).toFixed(0)}
-      </div>
+      {/* <div>
+        Distance from deadzone: {Number.parseFloat(distanceToCenter - deadZone).toFixed(0)}
+      </div> */}
       {/* Eventually replace with coordinate tracking component */}
       <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
       </div>
-      <div>
+      {/* <div>
         Left Eye:[{Number.parseFloat(leftEyeCoordinate._x).toFixed(1)},{Number.parseFloat(leftEyeCoordinate._y).toFixed(1)}]
       </div>
       <div>
@@ -187,7 +208,7 @@ function App() {
       </div>
       <div>
         Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
-      </div>
+      </div> */}
 
     </React.Fragment>
 

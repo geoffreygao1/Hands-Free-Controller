@@ -25,8 +25,8 @@ function App() {
 
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
-  const videoHeight = 240;
-  const videoWidth = 320;
+  const videoHeight = 120;
+  const videoWidth = 160;
   const canvasRef = React.useRef();
 
   //Load Models on startup
@@ -85,7 +85,7 @@ function App() {
 
         //Draw on canvas
         // canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
-        // canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 
         //Output points
         if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length == 68) {
@@ -170,7 +170,7 @@ function App() {
           captureVideo ?
             modelsLoaded ?
               <div class="container">
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
                   <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                   <canvas ref={canvasRef} style={{ position: 'absolute' }} />
                   <span class="deadzone"></span>
@@ -197,7 +197,7 @@ function App() {
       <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
       </div>
-      {/* <div>
+      <div>
         Left Eye:[{Number.parseFloat(leftEyeCoordinate._x).toFixed(1)},{Number.parseFloat(leftEyeCoordinate._y).toFixed(1)}]
       </div>
       <div>
@@ -208,7 +208,7 @@ function App() {
       </div>
       <div>
         Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
-      </div> */}
+      </div>
 
     </React.Fragment>
 

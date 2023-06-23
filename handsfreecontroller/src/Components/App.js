@@ -3,6 +3,7 @@ import React from 'react';
 // import Webcam from "react-webcam";
 import Header from './Header';
 import './App.css';
+import Cursor from './Cursor';
 
 function App() {
 
@@ -135,23 +136,23 @@ function App() {
     const angle = (Math.atan2(normalizedFaceCoordinate.y, normalizedFaceCoordinate.x) * 180 / Math.PI);
 
     if (distanceToCenter <= deadZone) {
-      setCursorDirection(["Deadzone", 0]);
+      setCursorDirection(["deadzone", 0]);
     } else if (angle > -112 && angle < -68) {
-      setCursorDirection(["Up", distanceToCenter]);
+      setCursorDirection(["up", distanceToCenter]);
     } else if (angle > -157 && angle < -113) {
-      setCursorDirection(["Up + Left", distanceToCenter]);
+      setCursorDirection(["up-left", distanceToCenter]);
     } else if (angle > 158 || angle < -158) {
-      setCursorDirection(["Left", distanceToCenter]);
+      setCursorDirection(["left", distanceToCenter]);
     } else if (angle > 113 && angle < 157) {
-      setCursorDirection(["Down + Left", distanceToCenter]);
+      setCursorDirection(["down-left", distanceToCenter]);
     } else if (angle > 68 && angle < 112) {
-      setCursorDirection(["Down", distanceToCenter]);
+      setCursorDirection(["down", distanceToCenter]);
     } else if (angle > 23 && angle < 67) {
-      setCursorDirection(["Down Right", distanceToCenter]);
+      setCursorDirection(["down-right", distanceToCenter]);
     } else if (angle > -22 && angle < 22) {
-      setCursorDirection(["Right", distanceToCenter]);
+      setCursorDirection(["right", distanceToCenter]);
     } else if (angle > -67 && angle < -23) {
-      setCursorDirection(["Up Right", distanceToCenter]);
+      setCursorDirection(["up-right", distanceToCenter]);
     }
   }
 
@@ -183,6 +184,9 @@ function App() {
             </>
         }
       </div >
+
+      <Cursor cursorDirection={cursorDirection} />
+      {cursorDirection}
       <h3>Coordinate Tracker</h3>
       <div>
         Cursor Direction: {cursorDirection[0]}, Magnitude: {Number.parseFloat(cursorDirection[1]).toFixed(0)}
@@ -194,7 +198,7 @@ function App() {
         Distance from deadzone: {Number.parseFloat(distanceToCenter - deadZone).toFixed(0)}
       </div> */}
       {/* Eventually replace with coordinate tracking component */}
-      <div>
+      {/* <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
       </div>
       <div>
@@ -208,7 +212,7 @@ function App() {
       </div>
       <div>
         Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
-      </div>
+      </div> */}
 
     </React.Fragment>
 

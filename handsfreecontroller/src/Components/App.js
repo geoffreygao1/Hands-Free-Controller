@@ -140,19 +140,19 @@ function App() {
     } else if (angle > -112 && angle < -68) {
       setCursorDirection(["up", distanceToCenter]);
     } else if (angle > -157 && angle < -113) {
-      setCursorDirection(["up-left", distanceToCenter]);
+      setCursorDirection(["up-right", distanceToCenter]);
     } else if (angle > 158 || angle < -158) {
-      setCursorDirection(["left", distanceToCenter]);
+      setCursorDirection(["right", distanceToCenter]);
     } else if (angle > 113 && angle < 157) {
-      setCursorDirection(["down-left", distanceToCenter]);
+      setCursorDirection(["down-right", distanceToCenter]);
     } else if (angle > 68 && angle < 112) {
       setCursorDirection(["down", distanceToCenter]);
     } else if (angle > 23 && angle < 67) {
-      setCursorDirection(["down-right", distanceToCenter]);
+      setCursorDirection(["down-left", distanceToCenter]);
     } else if (angle > -22 && angle < 22) {
-      setCursorDirection(["right", distanceToCenter]);
+      setCursorDirection(["left", distanceToCenter]);
     } else if (angle > -67 && angle < -23) {
-      setCursorDirection(["up-right", distanceToCenter]);
+      setCursorDirection(["up-left", distanceToCenter]);
     }
   }
 
@@ -166,15 +166,15 @@ function App() {
   return (
     <React.Fragment>
       <Header />
-      < div >
+      <div >
         {
           captureVideo ?
             modelsLoaded ?
               <div class="container">
-                <div style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
+                <div class="videoBox" style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
                   <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                   <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-                  <span class="deadzone"></span>
+                  <span class="deadzone" style={{ left: videoWidth / 2 }}></span>
                 </div>
               </div>
               :
@@ -194,11 +194,11 @@ function App() {
       <div>
         Center: {videoWidth / 2}, {videoHeight / 2}
       </div>
-      {/* <div>
+      <div>
         Distance from deadzone: {Number.parseFloat(distanceToCenter - deadZone).toFixed(0)}
-      </div> */}
+      </div>
       {/* Eventually replace with coordinate tracking component */}
-      {/* <div>
+      <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
       </div>
       <div>
@@ -212,7 +212,7 @@ function App() {
       </div>
       <div>
         Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
-      </div> */}
+      </div>
 
     </React.Fragment>
 

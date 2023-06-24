@@ -21,7 +21,7 @@ function App() {
   const [avgFacePosition, setavgFacePosition] = React.useState([]);
 
   //States for mouth status (open/close)
-  const [mouthOpen, setmouthOpen] = React.useState(0);
+  const [mouthOpen, setmouthOpen] = React.useState(false);
 
   //State for cursor control
   const deadZone = 15;
@@ -164,7 +164,7 @@ function App() {
     const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
     const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
     const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
-    (mouthOpenDistance < 10) ? setmouthOpen(0) : setmouthOpen(1);
+    (mouthOpenDistance < 10) ? setmouthOpen(false) : setmouthOpen(true);
   }
 
   // //Handle stop webcam
@@ -196,7 +196,7 @@ function App() {
         }
       </div >
 
-      <Cursor cursorDirection={cursorDirection} />
+      <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
       <h3>Coordinate Tracker</h3>
       <h4>Cursor Stuff</h4>
       <div>

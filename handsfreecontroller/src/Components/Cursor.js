@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 
-const Cursor = ({ cursorDirection }) => {
+const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [cursorTop, setCursorTop] = useState(0);
   const [cursorLeft, setCursorLeft] = useState(0);
   const cursorSize = 25; // Width and height of the cursor element
   const cursorStep = 0.1; // Adjust this value to change cursor movement speed
+
+  const [cursorColor, setcursorColor] = useState('blue');
 
 
   //Handles updating cursor position
@@ -19,7 +21,10 @@ const Cursor = ({ cursorDirection }) => {
     moveCursor();
   }, [cursorTop, cursorLeft]);
 
-
+  //Handles cursor click functionaity
+  useEffect(() => {
+    cursorClick();
+  }, [mouthOpen]);
 
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
@@ -75,6 +80,10 @@ const Cursor = ({ cursorDirection }) => {
     }
   };
 
+  const cursorClick = () => {
+    mouthOpen ? setcursorColor('red') : setcursorColor('blue');
+  }
+
   return (
     <React.Fragment>
       <div
@@ -83,8 +92,10 @@ const Cursor = ({ cursorDirection }) => {
           width: `${cursorSize}px`,
           height: `${cursorSize}px`,
           top: `${cursorTop}px`,
-          left: `${cursorLeft}px`
-        }}
+          left: `${cursorLeft}px`,
+          background: `${cursorColor}`
+        }
+        }
       />
     </React.Fragment>
   );

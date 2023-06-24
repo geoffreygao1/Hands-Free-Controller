@@ -64,9 +64,9 @@ canvas {
 }
 
 .cursor {
-  background-color: blue;
   opacity: 50%;
   position: absolute;
   border-Radius: 50%;
-  transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out,
+    background-color 0.05s;
 }

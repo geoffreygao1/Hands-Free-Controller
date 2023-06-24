@@ -1,5 +1,5 @@
 import * as faceapi from 'face-api.js';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import Webcam from "react-webcam";
 import Header from './Header';
 import './App.css';
@@ -16,8 +16,12 @@ function App() {
   const [leftEyeCoordinate, setleftEyeCoordinate] = React.useState([]);
   const [rightEyeCoordinate, setrightEyeCoordinate] = React.useState([]);
   const [noseCoordinate, setnoseCoordinate] = React.useState([]);
-  const [mouthCoordinate, setmouthCoordinate] = React.useState([]);
+  const [mouthBottomCoordinate, setmouthBottomCoordinate] = React.useState([]);
+  const [mouthTopCoordinate, setmouthTopCoordinate] = React.useState([]);
   const [avgFacePosition, setavgFacePosition] = React.useState([]);
+
+  //States for mouth status (open/close)
+  const [mouthOpen, setmouthOpen] = React.useState(0);
 
   //State for cursor control
   const deadZone = 15;
@@ -31,7 +35,7 @@ function App() {
   const canvasRef = React.useRef();
 
   //Load Models on startup
-  React.useEffect(() => {
+  useEffect(() => {
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + '/models';
       Promise.all([
@@ -44,10 +48,11 @@ function App() {
     startVideo();
   }, []);
 
-  //Calculates average face position when face moves
-  React.useEffect(() => {
+  //Updates face position and mouth open status when face moves
+  useEffect(() => {
     calculateAvgFacePosition();
     processDirection();
+    processMouthTrigger();
   }, [noseCoordinate])
 
   //Handle initiate Webcam
@@ -103,14 +108,15 @@ function App() {
     setleftEyeCoordinate(landmarksOutput[20]);
     setrightEyeCoordinate(landmarksOutput[25]);
     setnoseCoordinate(landmarksOutput[31]);
-    setmouthCoordinate(landmarksOutput[58]);
+    setmouthBottomCoordinate(landmarksOutput[58]);
+    setmouthTopCoordinate(landmarksOutput[52]);
   }
 
 
   // Calculates center of face based on landmark locations
   const calculateAvgFacePosition = () => {
-    const avgX = (leftEyeCoordinate.x + rightEyeCoordinate.x + noseCoordinate.x + mouthCoordinate.x) / 4;
-    const avgY = (leftEyeCoordinate.y + rightEyeCoordinate.y + noseCoordinate.y + mouthCoordinate.y) / 4;
+    const avgX = (leftEyeCoordinate.x + rightEyeCoordinate.x + noseCoordinate.x + mouthBottomCoordinate.x) / 4;
+    const avgY = (leftEyeCoordinate.y + rightEyeCoordinate.y + noseCoordinate.y + mouthBottomCoordinate.y) / 4;
     setavgFacePosition([Number.parseFloat(avgX).toFixed(1), Number.parseFloat(avgY).toFixed(1)]);
   }
 
@@ -125,7 +131,6 @@ function App() {
       "x": avgFacePosition[0],
       "y": avgFacePosition[1]
     }
-
     //Coordinate of average face point relative to center of canvas
     const normalizedFaceCoordinate = {
       "x": faceCenter.x - canvasCenter.x,
@@ -134,7 +139,6 @@ function App() {
     //Find distance from center and compare to deadzone
     setdistanceToCenter(Math.sqrt(Math.pow((normalizedFaceCoordinate.x), 2) + Math.pow((normalizedFaceCoordinate.y), 2)));
     const angle = (Math.atan2(normalizedFaceCoordinate.y, normalizedFaceCoordinate.x) * 180 / Math.PI);
-
     if (distanceToCenter <= deadZone) {
       setCursorDirection(["deadzone", 0]);
     } else if (angle > -112 && angle < -68) {
@@ -154,6 +158,13 @@ function App() {
     } else if (angle > -67 && angle < -23) {
       setCursorDirection(["up-left", distanceToCenter]);
     }
+  }
+
+  const processMouthTrigger = () => {
+    const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
+    const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
+    const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
+    (mouthOpenDistance < 10) ? setmouthOpen(0) : setmouthOpen(1);
   }
 
   // //Handle stop webcam
@@ -186,8 +197,8 @@ function App() {
       </div >
 
       <Cursor cursorDirection={cursorDirection} />
-      {cursorDirection}
       <h3>Coordinate Tracker</h3>
+      <h4>Cursor Stuff</h4>
       <div>
         Cursor Direction: {cursorDirection[0]}, Magnitude: {Number.parseFloat(cursorDirection[1]).toFixed(0)}
       </div>
@@ -197,7 +208,11 @@ function App() {
       <div>
         Distance from deadzone: {Number.parseFloat(distanceToCenter - deadZone).toFixed(0)}
       </div>
+      <div>
+        Is Mouth Open: {mouthOpen}
+      </div>
       {/* Eventually replace with coordinate tracking component */}
+      <h4>Coordinates</h4>
       <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
       </div>
@@ -211,7 +226,10 @@ function App() {
         Nose: [{Number.parseFloat(noseCoordinate._x).toFixed(1)},{Number.parseFloat(noseCoordinate._y).toFixed(1)}]
       </div>
       <div>
-        Mouth: [{Number.parseFloat(mouthCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthCoordinate._y).toFixed(1)}]
+        Mouth Bottom: [{Number.parseFloat(mouthBottomCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthBottomCoordinate._y).toFixed(1)}]
+      </div>
+      <div>
+        Mouth Top: [{Number.parseFloat(mouthTopCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthTopCoordinate._y).toFixed(1)}]
       </div>
 
     </React.Fragment>

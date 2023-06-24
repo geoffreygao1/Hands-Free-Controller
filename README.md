@@ -49,3 +49,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Friday 06/23/23
 * _11:00AM Added cursor that moves relative to webcam input_
+
+#### Saturday 06/24/23
+* _11:00AM Adding Mouth Open recognition_

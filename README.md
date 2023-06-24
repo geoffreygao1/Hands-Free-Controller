@@ -27,7 +27,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 ### _Near Term To Do List:_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
-  * _Mouth Open Close_
   * _HTML element interact_
 
 #### Thursday 06/15/23

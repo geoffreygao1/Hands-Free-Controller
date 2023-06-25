@@ -3,11 +3,14 @@ import './App.css';
 
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
+  //Cursor Position and movement states
   const [cursorTop, setCursorTop] = useState(0);
   const [cursorLeft, setCursorLeft] = useState(0);
   const cursorSize = 25; // Width and height of the cursor element
   const cursorStep = 0.1; // Adjust this value to change cursor movement speed
 
+  //Cursor interaction states
+  const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setcursorColor] = useState('blue');
 
 
@@ -24,6 +27,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Handles cursor click functionaity
   useEffect(() => {
     cursorClick();
+    handleInteraction();
   }, [mouthOpen]);
 
   const moveCursor = () => {
@@ -82,6 +86,17 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   const cursorClick = () => {
     mouthOpen ? setcursorColor('red') : setcursorColor('blue');
+    setInteractionEnabled(mouthOpen);
+  }
+
+  const handleInteraction = () => {
+    if (interactionEnabled) {
+      const hoveredElements = document.elementsFromPoint(cursorLeft, cursorTop);
+      hoveredElements.forEach(element => {
+        element.style.backgroundColor = "#0f0"; // Change background color
+      }
+      );
+    }
   }
 
   return (

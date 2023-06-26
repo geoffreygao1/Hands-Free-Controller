@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import './App.css';
 import Cursor from './Cursor';
+import HTML from './HTML';
 
 function App() {
 
@@ -197,6 +198,9 @@ function App() {
       </div >
 
       <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
+
+      <HTML />
+
       <h3>Coordinate Tracker</h3>
       <h4>Cursor Stuff</h4>
       <div>

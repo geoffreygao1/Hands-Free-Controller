@@ -7,7 +7,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [cursorTop, setCursorTop] = useState(0);
   const [cursorLeft, setCursorLeft] = useState(0);
   const cursorSize = 25; // Width and height of the cursor element
-  const cursorStep = 0.1; // Adjust this value to change cursor movement speed
+  const cursorStep = 0.05; // Adjust this value to change cursor movement speed
 
   //Cursor interaction states
   const [interactionEnabled, setInteractionEnabled] = useState(false);
@@ -44,7 +44,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const handleMove = () => {
     const [direction, magnitude] = cursorDirection;
     //exponentially scales movement farther you drag
-    const moveDistance = cursorStep * Math.pow(magnitude / 2, 2);
+    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.5);
     //Easier to move left and right than up and own
     const upDownMoveDistance = moveDistance * 2.5;
     //Cursor Movement Logic

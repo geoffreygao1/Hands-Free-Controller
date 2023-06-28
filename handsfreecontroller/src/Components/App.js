@@ -1,7 +1,6 @@
 import * as faceapi from 'face-api.js';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import Header from './Header.js';
 import './App.css';
 import Cursor from './Cursor.js';
 import HTML from './HTML.js';
@@ -91,7 +90,7 @@ function App() {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         //Draw on canvas
-        // canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
+        canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
         canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 
         //Output points
@@ -182,10 +181,10 @@ function App() {
           captureVideo ?
             modelsLoaded ?
               <div className="container">
-                <div className="videoBox" style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
+                <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
                   <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                   <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-                  <span className="deadzone" style={{ left: videoWidth / 2 }}></span>
+                  <span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />
                 </div>
               </div>
               :

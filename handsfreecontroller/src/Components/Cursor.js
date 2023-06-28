@@ -92,20 +92,23 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     if (interactionEnabled) {
       const cursorX = cursorLeft + cursorSize / 2; // Adjusted X coordinate
       const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
-      const hoveredElement = document.elementFromPoint(cursorX, cursorY);
-      if (
-        hoveredElement &&
-        hoveredElement.tagName.toLowerCase() !== 'div' &&
-        hoveredElement !== document.body
-      ) {
-        const clickEvent = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        });
-        hoveredElement.dispatchEvent(clickEvent);
-        console.log('Clicked!');
-      }
+      const elements = document.elementsFromPoint(cursorX, cursorY);
+      // Iterate over the elements array and trigger click events
+      elements.forEach((element) => {
+        if (
+          element &&
+          element.tagName.toLowerCase() !== 'div' &&
+          element !== document.body
+        ) {
+          const clickEvent = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          });
+          element.dispatchEvent(clickEvent);
+          console.log('Clicked!');
+        }
+      });
     }
   };
 

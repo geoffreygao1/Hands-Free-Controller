@@ -43,24 +43,16 @@ h3 {
 }
 
 .container {
-  position: relative;
-  color: white;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 video,
 canvas {
   transform: rotateY(180deg);
-}
-
-.deadzone {
-  height: 20px;
-  width: 20px;
-  background-color: red;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.3;
 }
 
 .cursor {
@@ -69,4 +61,14 @@ canvas {
   border-Radius: 50%;
   transition: all 0.3s ease-out,
     background-color 0.05s;
+  z-index: 2;
+}
+
+.deadzone {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  opacity: 30%;
 }

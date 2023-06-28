@@ -31,8 +31,8 @@ function App() {
 
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
-  const videoHeight = 240;
-  const videoWidth = 320;
+  const videoHeight = 120;
+  const videoWidth = 160;
   const canvasRef = React.useRef();
 
   //Load Models on startup
@@ -165,7 +165,7 @@ function App() {
     const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
     const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
     const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
-    (mouthOpenDistance > 25) ? setmouthOpen(true) : setmouthOpen(false);
+    (mouthOpenDistance > 12) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
   // //Handle stop webcam

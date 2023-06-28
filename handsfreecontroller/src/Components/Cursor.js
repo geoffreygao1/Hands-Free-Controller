@@ -4,8 +4,8 @@ import './App.css';
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor Position and movement states
-  const [cursorTop, setCursorTop] = useState(0);
-  const [cursorLeft, setCursorLeft] = useState(0);
+  const [cursorTop, setCursorTop] = useState(window.innerHeight / 2);
+  const [cursorLeft, setCursorLeft] = useState(window.innerWidth / 2);
   const cursorSize = 25; // Width and height of the cursor element
   const cursorStep = 0.05; // Adjust this value to change cursor movement speed
 

@@ -29,6 +29,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
   * _Clean up state, currently too many vairables_
   * _HTML element interact_
   * _Change hover elements to react with a radius instead of a coordinate_
+  * _Import HTML_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_
@@ -58,3 +59,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### MOnday 06/26/23
 * _7:00AM Cursor hover interaction_
+
+#### Tuesday 06/27/23
+* _7:00PM Cursor hover interaction_

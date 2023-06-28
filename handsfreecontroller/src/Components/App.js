@@ -196,46 +196,8 @@ function App() {
             </>
         }
       </div >
-
-
-
-      <HTML />
-
       <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
-      {/* <h3>Coordinate Tracker</h3>
-      <h4>Cursor Stuff</h4>
-      <div>
-        Cursor Direction: {cursorDirection[0]}, Magnitude: {Number.parseFloat(cursorDirection[1]).toFixed(0)}
-      </div>
-      <div>
-        Center: {videoWidth / 2}, {videoHeight / 2}
-      </div>
-      <div>
-        Distance from deadzone: {Number.parseFloat(distanceToCenter - deadZone).toFixed(0)}
-      </div>
-      <div>
-        Is Mouth Open: {mouthOpen}
-      </div>
-      <h4>Coordinates</h4>
-      <div>
-        Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
-      </div>
-      <div>
-        Left Eye:[{Number.parseFloat(leftEyeCoordinate._x).toFixed(1)},{Number.parseFloat(leftEyeCoordinate._y).toFixed(1)}]
-      </div>
-      <div>
-        Right Eye: [{Number.parseFloat(rightEyeCoordinate._x).toFixed(1)},{Number.parseFloat(rightEyeCoordinate._y).toFixed(1)}]
-      </div>
-      <div>
-        Nose: [{Number.parseFloat(noseCoordinate._x).toFixed(1)},{Number.parseFloat(noseCoordinate._y).toFixed(1)}]
-      </div>
-      <div>
-        Mouth Bottom: [{Number.parseFloat(mouthBottomCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthBottomCoordinate._y).toFixed(1)}]
-      </div>
-      <div>
-        Mouth Top: [{Number.parseFloat(mouthTopCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthTopCoordinate._y).toFixed(1)}]
-      </div> */}
-
+      <HTML />
     </React.Fragment>
   );
 }

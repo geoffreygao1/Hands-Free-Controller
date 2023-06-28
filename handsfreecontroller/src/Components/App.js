@@ -177,7 +177,6 @@ function App() {
 
   return (
     <React.Fragment>
-      <Header />
       <div >
         {
           captureVideo ?

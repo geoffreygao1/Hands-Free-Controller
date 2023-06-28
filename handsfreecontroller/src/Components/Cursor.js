@@ -13,11 +13,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setcursorColor] = useState('blue');
 
-
-  useEffect(() => {
-    setInteractionEnabled(false);
-  }, []);
-
   //Handles updating cursor position
   useEffect(() => {
     handleMove();
@@ -95,13 +90,20 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   const handleInteraction = () => {
     if (interactionEnabled) {
-      const hoveredElement = document.elementFromPoint(cursorLeft, cursorTop);
-      if (hoveredElement && hoveredElement.tagName.toLowerCase() !== 'div' && hoveredElement !== document.body) {
+      const cursorX = cursorLeft + cursorSize / 2; // Adjusted X coordinate
+      const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
+      const hoveredElement = document.elementFromPoint(cursorX, cursorY);
+      if (
+        hoveredElement &&
+        hoveredElement.tagName.toLowerCase() !== 'div' &&
+        hoveredElement !== document.body
+      ) {
         hoveredElement.style.backgroundColor = '#0f0'; // Change background color
         console.log('Clicked!');
       }
     }
-  }
+  };
+
 
   return (
     <React.Fragment>
@@ -110,8 +112,8 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         style={{
           width: `${cursorSize}px`,
           height: `${cursorSize}px`,
-          top: `${cursorTop}px`,
-          left: `${cursorLeft}px`,
+          top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
+          left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
           background: `${cursorColor}`
         }
         }

@@ -7,13 +7,10 @@ const HTMLPage = () => {
       <p>This is a block of random text</p>
       <ul>
         <li>
-          <a>Link 1</a>
+          <a href="https://Wikipedia.org">Wikipedia</a>
         </li>
         <li>
-          <a>Link 2</a>
-        </li>
-        <li>
-          <a>Link 3</a>
+          <a href="https://Google.com">Google</a>
         </li>
       </ul>
       <input type="text"></input>

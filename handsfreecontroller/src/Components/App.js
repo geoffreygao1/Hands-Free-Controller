@@ -1,10 +1,10 @@
 import * as faceapi from 'face-api.js';
-import React, { useEffect } from 'react';
-// import Webcam from "react-webcam";
-import Header from './Header';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
+import Header from './Header.js';
 import './App.css';
-import Cursor from './Cursor';
-import HTML from './HTML';
+import Cursor from './Cursor.js';
+import HTML from './HTML.js';
 
 function App() {
 
@@ -197,11 +197,12 @@ function App() {
         }
       </div >
 
-      <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
+
 
       <HTML />
 
-      <h3>Coordinate Tracker</h3>
+      <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
+      {/* <h3>Coordinate Tracker</h3>
       <h4>Cursor Stuff</h4>
       <div>
         Cursor Direction: {cursorDirection[0]}, Magnitude: {Number.parseFloat(cursorDirection[1]).toFixed(0)}
@@ -215,7 +216,6 @@ function App() {
       <div>
         Is Mouth Open: {mouthOpen}
       </div>
-      {/* Eventually replace with coordinate tracking component */}
       <h4>Coordinates</h4>
       <div>
         Average Face Position = [{avgFacePosition[0]}, {avgFacePosition[1]}]
@@ -234,10 +234,9 @@ function App() {
       </div>
       <div>
         Mouth Top: [{Number.parseFloat(mouthTopCoordinate._x).toFixed(1)}, {Number.parseFloat(mouthTopCoordinate._y).toFixed(1)}]
-      </div>
+      </div> */}
 
     </React.Fragment>
-
   );
 }
 

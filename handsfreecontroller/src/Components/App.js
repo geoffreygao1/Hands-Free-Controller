@@ -30,8 +30,8 @@ function App() {
 
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
-  const videoHeight = 120;
-  const videoWidth = 160;
+  const videoHeight = 90;
+  const videoWidth = 120;
   const canvasRef = React.useRef();
 
   //Load Models on startup
@@ -82,7 +82,6 @@ function App() {
           width: videoWidth,
           height: videoHeight
         }
-
         faceapi.matchDimensions(canvasRef.current, displaySize);
 
         //initiate detections
@@ -90,8 +89,8 @@ function App() {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         //Draw on canvas
-        canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+        // canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
+        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections, { willReadFrequently: true });
 
         //Output points
         if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length === 68) {
@@ -164,7 +163,7 @@ function App() {
     const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
     const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
     const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
-    (mouthOpenDistance > 12) ? setmouthOpen(true) : setmouthOpen(false);
+    (mouthOpenDistance > 10) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
   // //Handle stop webcam

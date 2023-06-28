@@ -7,7 +7,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [cursorTop, setCursorTop] = useState(window.innerHeight / 2);
   const [cursorLeft, setCursorLeft] = useState(window.innerWidth / 2);
   const cursorSize = 25; // Width and height of the cursor element
-  const cursorStep = 0.05; // Adjust this value to change cursor movement speed
+  const cursorStep = 0.07; // Adjust this value to change cursor movement speed
 
   //Cursor interaction states
   const [interactionEnabled, setInteractionEnabled] = useState(false);
@@ -92,14 +92,20 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     if (interactionEnabled) {
       const cursorX = cursorLeft + cursorSize / 2; // Adjusted X coordinate
       const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
+      const radius = 50; // Adjust the radius value as needed
+
       const elements = document.elementsFromPoint(cursorX, cursorY);
-      // Iterate over the elements array and trigger click events
       elements.forEach((element) => {
-        if (
-          element &&
-          element.tagName.toLowerCase() !== 'div' &&
-          element !== document.body
-        ) {
+        const elementRect = element.getBoundingClientRect();
+        const elementX = elementRect.left + elementRect.width / 2;
+        const elementY = elementRect.top + elementRect.height / 2;
+
+        const distance = Math.sqrt(
+          Math.pow(cursorX - elementX, 2) + Math.pow(cursorY - elementY, 2)
+        );
+
+        if (distance <= radius) {
+          // Trigger click event on the element
           const clickEvent = new MouseEvent('click', {
             bubbles: true,
             cancelable: true,
@@ -111,7 +117,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       });
     }
   };
-
 
   return (
     <React.Fragment>

@@ -38,6 +38,10 @@
   }
 }
 
+body {
+  font-size: 32px;
+}
+
 h3 {
   color: orange;
 }
@@ -53,8 +57,8 @@ canvas {
 }
 
 .deadzone {
-  height: 20px;
-  width: 20px;
+  height: 40px;
+  width: 40px;
   background-color: red;
   border-radius: 50%;
   position: absolute;

@@ -1,5 +1,5 @@
 import * as faceapi from 'face-api.js';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // import Webcam from "react-webcam";
 import Header from './Header';
 import './App.css';
@@ -31,8 +31,8 @@ function App() {
 
   //Establish references for webcam and canvas
   const videoRef = React.useRef();
-  const videoHeight = 120;
-  const videoWidth = 160;
+  const videoHeight = 240;
+  const videoWidth = 320;
   const canvasRef = React.useRef();
 
   //Load Models on startup
@@ -54,7 +54,7 @@ function App() {
     calculateAvgFacePosition();
     processDirection();
     processMouthTrigger();
-  }, [noseCoordinate])
+  }, [noseCoordinate]);
 
   //Handle initiate Webcam
   const startVideo = () => {
@@ -95,7 +95,7 @@ function App() {
         canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 
         //Output points
-        if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length == 68) {
+        if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length === 68) {
           collectLandmarks(resizedDetections);
         }
 
@@ -165,7 +165,7 @@ function App() {
     const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
     const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
     const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
-    (mouthOpenDistance < 10) ? setmouthOpen(false) : setmouthOpen(true);
+    (mouthOpenDistance > 25) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
   // //Handle stop webcam

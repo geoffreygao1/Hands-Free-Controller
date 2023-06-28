@@ -14,6 +14,10 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [cursorColor, setcursorColor] = useState('blue');
 
 
+  useEffect(() => {
+    setInteractionEnabled(false);
+  }, []);
+
   //Handles updating cursor position
   useEffect(() => {
     handleMove();
@@ -91,18 +95,18 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   const handleInteraction = () => {
     if (interactionEnabled) {
-      const hoveredElements = document.elementsFromPoint(cursorLeft, cursorTop);
-      hoveredElements.forEach(element => {
-        element.style.backgroundColor = "#0f0"; // Change background color
+      const hoveredElement = document.elementFromPoint(cursorLeft, cursorTop);
+      if (hoveredElement && hoveredElement.tagName.toLowerCase() !== 'div' && hoveredElement !== document.body) {
+        hoveredElement.style.backgroundColor = '#0f0'; // Change background color
+        console.log('Clicked!');
       }
-      );
     }
   }
 
   return (
     <React.Fragment>
       <div
-        class="cursor"
+        className="cursor"
         style={{
           width: `${cursorSize}px`,
           height: `${cursorSize}px`,

@@ -98,7 +98,12 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         hoveredElement.tagName.toLowerCase() !== 'div' &&
         hoveredElement !== document.body
       ) {
-        hoveredElement.style.backgroundColor = '#0f0'; // Change background color
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        hoveredElement.dispatchEvent(clickEvent);
         console.log('Clicked!');
       }
     }

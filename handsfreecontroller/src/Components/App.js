@@ -182,11 +182,11 @@ function App() {
         {
           captureVideo ?
             modelsLoaded ?
-              <div class="container">
-                <div class="videoBox" style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
+              <div className="container">
+                <div className="videoBox" style={{ display: 'flex', justifyContent: 'left', padding: '10px' }}>
                   <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                   <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-                  <span class="deadzone" style={{ left: videoWidth / 2 }}></span>
+                  <span className="deadzone" style={{ left: videoWidth / 2 }}></span>
                 </div>
               </div>
               :

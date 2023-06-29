@@ -1,6 +1,6 @@
 import * as faceapi from 'face-api.js';
-import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect } from 'react';
+// import ReactDOM from 'react-dom';
 import './App.css';
 import Cursor from './Cursor.js';
 import HTML from './HTML.js';

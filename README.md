@@ -62,3 +62,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Tuesday 06/27/23
 * _7:00PM Cursor hover interaction_
+
+#### Wednesday 06/28/23
+* _8:00PM Webpack/Chrome Extension research_

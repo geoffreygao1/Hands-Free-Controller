@@ -27,9 +27,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
 ### _Near Term To Do List:_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
-  * _HTML element interact_
-  * _Change hover elements to react with a radius instead of a coordinate_
-  * _Import HTML_
+  * _Scroll Buttons_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_
@@ -65,3 +63,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Wednesday 06/28/23
 * _8:00PM Webpack/Chrome Extension research_
+
+#### Friday 06/30/23
+* _11:00AM Successfully implemented chrome extension_

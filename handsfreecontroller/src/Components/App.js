@@ -1,15 +1,15 @@
 import * as faceapi from 'face-api.js';
 import React, { useEffect } from 'react';
-// import ReactDOM from 'react-dom';
 import './App.css';
 import Cursor from './Cursor.js';
 import HTML from './HTML.js';
 
 function App() {
 
-  //State for model loaded and capture video
+  //State for face recognition remodel loaded, captureVideo started, and videoLoaded to web page
   const [modelsLoaded, setModelsLoaded] = React.useState(false);
   const [captureVideo, setCaptureVideo] = React.useState(false);
+  const [videoLoaded, setVideoLoaded] = React.useState(false);
 
   //States for face coordinates
   //May need to change to single object to simplify
@@ -34,7 +34,7 @@ function App() {
   const videoWidth = 120;
   const canvasRef = React.useRef();
 
-  //Load Models on startup
+  //Load Models on startup. This will change in the chrome extension version
   useEffect(() => {
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -44,8 +44,13 @@ function App() {
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       ]).then(setModelsLoaded(true));
     }
-    loadModels();
-    startVideo();
+    loadModels()
+      .then(() => {
+        startVideo();
+      })
+      .catch(error => {
+        console.error('Error loading models:', error);
+      });
   }, []);
 
   //Updates face position and mouth open status when face moves
@@ -65,6 +70,7 @@ function App() {
         video.srcObject = stream;
         setTimeout(function () {
           video.play();
+          setVideoLoaded(true);
         }, 100);
       })
       .catch(err => {
@@ -89,7 +95,7 @@ function App() {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         //Draw on canvas
-        // canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
+        canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
         canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections, { willReadFrequently: true });
 
         //Output points
@@ -166,34 +172,28 @@ function App() {
     (mouthOpenDistance > 10) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
-  // //Handle stop webcam
-  // const closeWebcam = () => {
-  //   videoRef.current.pause();
-  //   videoRef.current.srcObject.getTracks()[0].stop();
-  //   setCaptureVideo(false);
-  // }
-
   return (
     <React.Fragment>
       <div >
         {
           captureVideo ?
-            modelsLoaded ?
-              <div className="container">
-                <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
-                  <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
-                  <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-                  <span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />
-                </div>
-              </div>
-              :
-              <div>loading...</div>
-            :
-            <>
-            </>
+            (
+              modelsLoaded ?
+                (<div className="container">
+                  <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
+                    <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                    <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+                    {
+                      videoLoaded ? (<span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />) : <></>
+                    }
+                  </div>
+                </div>)
+                :
+                <div>loading...</div>
+            ) : <></>
         }
       </div >
-      <Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />
+      {videoLoaded ? (<Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />) : <></>}
       <HTML />
     </React.Fragment>
   );

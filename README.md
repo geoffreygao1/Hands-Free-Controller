@@ -65,4 +65,4 @@ Copyright (c) _2023_ _Geoffrey Gao_
 * _8:00PM Webpack/Chrome Extension research_
 
 #### Friday 06/30/23
-* _11:00AM Successfully implemented chrome extension_
+* _11:00AM Successfully implemented chrome extension!_

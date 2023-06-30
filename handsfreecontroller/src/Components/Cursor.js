@@ -11,7 +11,21 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   //Cursor interaction states
   const [interactionEnabled, setInteractionEnabled] = useState(false);
-  const [cursorColor, setcursorColor] = useState('blue');
+  const [cursorColor, setCursorColor] = useState('blue');
+
+  //Mouse overlay
+  useEffect(() => {
+    const overlayDiv = document.getElementById('overlayDiv');
+    overlayDiv.addEventListener('mousemove', handleMouseMovement);
+    overlayDiv.addEventListener('mousedown', handleMouseClick);
+    overlayDiv.addEventListener('mouseup', handleMouseRelease);
+
+    return () => {
+      overlayDiv.removeEventListener('mousemove', handleMouseMovement);
+      overlayDiv.removeEventListener('mousedown', handleMouseClick);
+      overlayDiv.removeEventListener('mouseup', handleMouseRelease);
+    };
+  }, []);
 
   //Handles updating cursor position
   useEffect(() => {
@@ -28,6 +42,10 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     cursorClick();
     handleInteraction();
   }, [mouthOpen]);
+
+  useEffect(() => {
+    handleInteraction();
+  }, [interactionEnabled]);
 
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
@@ -84,7 +102,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   };
 
   const cursorClick = () => {
-    mouthOpen ? setcursorColor('red') : setcursorColor('blue');
+    mouthOpen ? setCursorColor('red') : setCursorColor('blue');
     setInteractionEnabled(mouthOpen);
   }
 
@@ -94,7 +112,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
       const radius = 50; // Adjust the radius value as needed
 
-      const elements = document.elementsFromPoint(cursorX, cursorY);
+      const elements = document.elementsFromPoint(cursorLeft, cursorTop);
       elements.forEach((element) => {
         const elementRect = element.getBoundingClientRect();
         const elementX = elementRect.left + elementRect.width / 2;
@@ -118,8 +136,30 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     }
   };
 
+  const handleMouseMovement = (event) => {
+    setCursorTop(event.clientY);
+    setCursorLeft(event.clientX);
+  };
+
+  const handleMouseClick = () => {
+    setCursorColor('red');
+    setInteractionEnabled(true);
+  };
+
+  const handleMouseRelease = () => {
+    setCursorColor('blue');
+    setInteractionEnabled(false);
+  };
+
   return (
     <React.Fragment>
+      <div
+        id="overlayDiv"
+        className="overlay"
+        style={{
+          pointerEvents: 'auto'
+        }}
+      />
       <div
         className="cursor"
         style={{

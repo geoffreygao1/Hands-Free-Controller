@@ -1,7 +1,7 @@
 {
-  "name": "ReactJS Chrome Extension",
-  "description": "Using ReactJS to build a Chrome Extension",
-  "version": "1.0.1",
+  "name": "Hands Free Controller",
+  "description": "Use your webcam to interact with websites",
+  "version": "1.0.0",
   "manifest_version": 3,
   "content_scripts": [
     {

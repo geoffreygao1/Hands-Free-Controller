@@ -66,3 +66,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Friday 06/30/23
 * _11:00AM Successfully implemented chrome extension!_
+
+#### Saturday 07/01/23
+* _Added extension stylings, code cleanup, and debugging_

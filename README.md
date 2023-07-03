@@ -28,6 +28,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
   * _Scroll Buttons_
+  * _Virtual Keyboard_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_
@@ -69,3 +70,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Saturday 07/01/23
 * _Added extension stylings, code cleanup, and debugging_
+
+#### Sunday 07/03/23
+* _Implementing virtual keyboard_

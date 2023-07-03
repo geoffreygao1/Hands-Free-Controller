@@ -2,19 +2,22 @@
 
 #### By _Geoffrey Gao_
 
-#### _An accessibility application that allows for hands-free control of a web browser using webcam input_
+#### _An accessibility application that allows for hands-free control of a web browser using webcam input._
 
 ## Technologies Used
 
-* _TBD_
+* _Javascript/React_
+* _[Face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
+* _Node.js_
+* _Chrome Extension_
 
 ## Description
 
-_An accessibility application that allows for hands-free control of a web browser using webcam input. Includes functionality that allows users to click, scroll, and input text using various head/face motions/expressions_
+_An accessibility application that allows for hands-free control of a web browser using webcam input. Uses face recognition through face-api to determine cursor movement and action. Includes functionality that allows users to click, scroll, and input text using various head/face motions/expressions. Can be run locally (using Node.js) or in the browser as a Chrome Extension_
 
 ## Known Bugs
 
-* _TBD_
+_Send bug reports to [geoffreygao1@gmail.com](mailto:geoffreygao1@gmail.com)_
 
 ## License
 

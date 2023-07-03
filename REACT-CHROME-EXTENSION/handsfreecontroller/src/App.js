@@ -1,6 +1,5 @@
 import * as faceapi from 'face-api.js';
 import React, { useEffect } from 'react';
-// import ReactDOM from 'react-dom';
 import './App.css';
 import Cursor from './Cursor.js';
 /*global chrome*/
@@ -8,7 +7,7 @@ import Cursor from './Cursor.js';
 
 function App() {
 
-  //State for model loaded and capture video
+  //State for face recognition remodel loaded, captureVideo started, and videoLoaded to web page
   const [modelsLoaded, setModelsLoaded] = React.useState(false);
   const [captureVideo, setCaptureVideo] = React.useState(false);
   const [videoLoaded, setVideoLoaded] = React.useState(false);
@@ -74,13 +73,11 @@ function App() {
       .getUserMedia({ video: { width: 300 } })
       .then(stream => {
         let video = videoRef.current;
-        // console.log('videoRef:', video); // Check if videoRef is defined
         video.srcObject = stream;
         setTimeout(function () {
           video.play();
           setVideoLoaded(true);
         }, 100);
-        // console.log('videoRef after assignment:', video); // Check if srcObject is assigned
       })
       .catch(err => {
         console.error("error:", err);
@@ -181,33 +178,25 @@ function App() {
     (mouthOpenDistance > 10) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
-  // //Handle stop webcam
-  // const closeWebcam = () => {
-  //   videoRef.current.pause();
-  //   videoRef.current.srcObject.getTracks()[0].stop();
-  //   setCaptureVideo(false);
-  // }
-
   return (
     <React.Fragment>
       <div >
         {
           captureVideo ?
-            modelsLoaded ?
-              <div className="container" style={{ position: 'fixed', top: 0, right: 0 }}>
-                <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
-                  <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
-                  <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-                  {
-                    videoLoaded ? (<span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />) : <></>
-                  }
-                </div>
-              </div>
-              :
-              <div>loading...</div>
-            :
-            <>
-            </>
+            (
+              modelsLoaded ?
+                (<div className="container" style={{ position: 'fixed', top: 0, right: 0 }}>
+                  <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
+                    <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                    <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+                    {
+                      videoLoaded ? (<span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />) : <></>
+                    }
+                  </div>
+                </div>)
+                :
+                <div>loading...</div>
+            ) : <></>
         }
       </div >
       {videoLoaded ? (<Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />) : <></>}

@@ -96,7 +96,7 @@ function App() {
 
         //Draw on canvas
         canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections, { willReadFrequently: true });
+        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 
         //Output points
         if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length === 68) {
@@ -179,7 +179,7 @@ function App() {
           captureVideo ?
             (
               modelsLoaded ?
-                (<div className="container">
+                (<div className="container" style={{ position: 'fixed', top: 0, right: 0 }}>
                   <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
                     <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                     <canvas ref={canvasRef} style={{ position: 'absolute' }} />

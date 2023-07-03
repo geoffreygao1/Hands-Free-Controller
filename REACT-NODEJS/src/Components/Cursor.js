@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor Position and movement states
@@ -12,6 +11,12 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor interaction states
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setCursorColor] = useState('blue');
+
+  //Keyboard States
+  const [keyboardInput, setKeyboardInput] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  const keyboardRef = useRef(null);
 
   //Mouse overlay
   useEffect(() => {
@@ -123,6 +128,12 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         );
 
         if (distance <= radius) {
+          //Checks if element is an text input to open keyboard
+          if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
+            setKeyboardVisible(true);
+          } else {
+            setKeyboardVisible(false);
+          }
           // Trigger click event on the element
           const clickEvent = new MouseEvent('click', {
             bubbles: true,
@@ -150,6 +161,26 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setInteractionEnabled(false);
   };
 
+
+  //Keyboard Functions
+  const handleKeyboardInputChange = (input) => {
+    console.log("Input changed", input);
+    // setKeyboardInput(input);
+  };
+
+  const handleCloseKeyboard = () => {
+    setKeyboardVisible(false);
+  };
+
+  const handleKeyPress = (button) => {
+    console.log("Button pressed", button);
+  }
+
+  const handleKeyboardSubmit = () => {
+    setKeyboardInput('');
+    setKeyboardVisible(false);
+  };
+
   return (
     <React.Fragment>
       <div
@@ -170,8 +201,15 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         }
         }
       />
+      {keyboardVisible ? (
+        <div className="keyboard-container">
+          test
+        </div>
+      ) : <></>}
     </React.Fragment>
   );
+
+
 };
 
 export default Cursor;

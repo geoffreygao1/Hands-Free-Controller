@@ -130,7 +130,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
             view: window,
           });
           element.dispatchEvent(clickEvent);
-          // console.log('Clicked!');
         }
       });
     }

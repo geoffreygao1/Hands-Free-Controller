@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from "react-dom";
+import { KeyboardReact as Keyboard } from "react-simple-keyboard"; import "react-simple-keyboard/build/css/index.css";
 import './App.css';
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
@@ -15,8 +17,9 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Keyboard States
   const [keyboardInput, setKeyboardInput] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-
-  const keyboardRef = useRef(null);
+  const [input, setInput] = useState("");
+  const [layout, setLayout] = useState("default");
+  const keyboard = useRef();
 
   //Mouse overlay
   useEffect(() => {
@@ -131,8 +134,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
           //Checks if element is an text input to open keyboard
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setKeyboardVisible(true);
-          } else {
-            setKeyboardVisible(false);
           }
           // Trigger click event on the element
           const clickEvent = new MouseEvent('click', {
@@ -202,11 +203,28 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         }
       />
       {keyboardVisible ? (
-        <div className="keyboard-container">
-          test
+        <div style={{
+          position: 'absolute',
+          bottom: '50px',
+          width: '100%'
+
+        }}>
+          <div className="keyboard-container">
+            <Keyboard
+              keyboardRef={r => (keyboard.current = r)}
+              layoutName={layout}
+              onChange={handleKeyboardInputChange}
+              onKeyPress={handleKeyPress}
+            />
+            <div>
+              <button onClick={handleKeyboardSubmit}>Submit</button>
+              <button onClick={handleCloseKeyboard}>Hide</button>
+            </div>
+          </div>
         </div>
-      ) : <></>}
-    </React.Fragment>
+      ) : <></>
+      }
+    </React.Fragment >
   );
 
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from "react-dom";
-import { KeyboardReact as Keyboard } from "react-simple-keyboard"; import "react-simple-keyboard/build/css/index.css";
+import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
+import "react-simple-keyboard/build/css/index.css";
+
+
+
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor Position and movement states
@@ -143,6 +147,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
           });
           element.dispatchEvent(clickEvent);
         }
+
       });
     }
   };
@@ -166,7 +171,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Keyboard Functions
   const handleKeyboardInputChange = (input) => {
     console.log("Input changed", input);
-    // setKeyboardInput(input);
   };
 
   const handleCloseKeyboard = () => {
@@ -186,44 +190,39 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     <React.Fragment>
       <div
         id="overlayDiv"
-        className="overlay"
-        style={{
-          pointerEvents: 'auto'
-        }}
-      />
-      <div
-        className="cursor"
-        style={{
-          width: `${cursorSize}px`,
-          height: `${cursorSize}px`,
-          top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
-          left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
-          background: `${cursorColor}`
-        }
-        }
-      />
-      {keyboardVisible ? (
-        <div style={{
-          position: 'absolute',
-          bottom: '50px',
-          width: '100%'
-
-        }}>
-          <div className="keyboard-container">
-            <Keyboard
-              keyboardRef={r => (keyboard.current = r)}
-              layoutName={layout}
-              onChange={handleKeyboardInputChange}
-              onKeyPress={handleKeyPress}
-            />
-            <div>
-              <button onClick={handleKeyboardSubmit}>Submit</button>
-              <button onClick={handleCloseKeyboard}>Hide</button>
+        className="overlay">
+        <div
+          className="cursor"
+          style={{
+            width: `${cursorSize}px`,
+            height: `${cursorSize}px`,
+            top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
+            left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
+            background: `${cursorColor}`
+          }}>
+        </div>
+        {keyboardVisible ? (
+          <div style={{
+            position: 'absolute',
+            bottom: '50px',
+            width: '100%'
+          }}>
+            <div className="keyboard-container">
+              <Keyboard
+                keyboardRef={r => (keyboard.current = r)}
+                layoutName={layout}
+                onChange={handleKeyboardInputChange}
+                onKeyPress={handleKeyPress}
+              />
+              <div>
+                <button onClick={handleKeyboardSubmit}>Submit</button>
+                <button onClick={handleCloseKeyboard}>Hide</button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : <></>
-      }
+        ) : <></>
+        }
+      </div>
     </React.Fragment >
   );
 

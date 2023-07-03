@@ -179,7 +179,7 @@ function App() {
           captureVideo ?
             (
               modelsLoaded ?
-                (<div className="container" style={{ position: 'fixed', top: 0, right: 0 }}>
+                (<div className="webcam-container" style={{ position: 'fixed', top: 0, right: 0 }}>
                   <div className="videoBox" style={{ display: 'flex', justifyContent: 'right', padding: '10px' }}>
                     <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                     <canvas ref={canvasRef} style={{ position: 'absolute' }} />

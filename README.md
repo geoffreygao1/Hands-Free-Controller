@@ -7,7 +7,8 @@
 ## Technologies Used
 
 * _Javascript/React_
-* _[Face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
+* _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
+* _[react-simple-keyboard](https://github.com/hodgef/react-simple-keyboard)
 * _Node.js_
 * _Chrome Extension_
 

@@ -23,7 +23,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const keyboard = useRef();
   const [activeTextInput, setActiveTextInput] = useState(null);
 
-
   //Mouse overlay
   useEffect(() => {
     const overlayDiv = document.getElementById('overlayDiv');
@@ -231,13 +230,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     </React.Fragment >
   );
 
-
 };
 
 export default Cursor;
-
-
-
-
-
-

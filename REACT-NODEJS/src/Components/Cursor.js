@@ -4,9 +4,6 @@ import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
 import "react-simple-keyboard/build/css/index.css";
 
-
-
-
 const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor Position and movement states
   const [cursorTop, setCursorTop] = useState(window.innerHeight / 2);
@@ -24,6 +21,8 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
+  const [activeTextInput, setActiveTextInput] = useState(null);
+
 
   //Mouse overlay
   useEffect(() => {
@@ -51,13 +50,23 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   //Handles cursor click functionaity
   useEffect(() => {
-    cursorClick();
-    handleInteraction();
+    if (mouthOpen) {
+      cursorClick();
+      handleInteraction();
+    }
+    mouthOpen ? setCursorColor('red') : setCursorColor('blue');
   }, [mouthOpen]);
 
   useEffect(() => {
     handleInteraction();
   }, [interactionEnabled]);
+
+  //updates active text box when keyboardinput changes
+  useEffect(() => {
+    if (activeTextInput) {
+      activeTextInput.value = keyboardInput;
+    }
+  }, [keyboardInput]);
 
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
@@ -114,7 +123,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   };
 
   const cursorClick = () => {
-    mouthOpen ? setCursorColor('red') : setCursorColor('blue');
     setInteractionEnabled(mouthOpen);
   }
 
@@ -137,17 +145,22 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         if (distance <= radius) {
           //Checks if element is an text input to open keyboard
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
+            setActiveTextInput(element); // Set the active text input
             setKeyboardVisible(true);
+          } else if (element.getAttribute('data-skbtn')) {
+            const buttonValue = element.getAttribute('data-skbtn');
+            switch (buttonValue) {
+              case '{bksp}':
+                setKeyboardInput((prevInput) => prevInput.slice(0, -1));
+                break;
+              default:
+                setKeyboardInput((prevInput) => prevInput + buttonValue);
+                break;
+            }
+          } else {
+            element.click();
           }
-          // Trigger click event on the element
-          const clickEvent = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-          });
-          element.dispatchEvent(clickEvent);
         }
-
       });
     }
   };
@@ -167,21 +180,15 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setInteractionEnabled(false);
   };
 
-
   //Keyboard Functions
   const handleKeyboardInputChange = (input) => {
-    console.log("Input changed", input);
+    if (activeTextInput) {
+      activeTextInput.value = input;
+    }
   };
-
-  const handleCloseKeyboard = () => {
-    setKeyboardVisible(false);
-  };
-
-  const handleKeyPress = (button) => {
-    console.log("Button pressed", button);
-  }
 
   const handleKeyboardSubmit = () => {
+    setActiveTextInput(null);
     setKeyboardInput('');
     setKeyboardVisible(false);
   };
@@ -212,11 +219,9 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
                 keyboardRef={r => (keyboard.current = r)}
                 layoutName={layout}
                 onChange={handleKeyboardInputChange}
-                onKeyPress={handleKeyPress}
               />
               <div>
                 <button onClick={handleKeyboardSubmit}>Submit</button>
-                <button onClick={handleCloseKeyboard}>Hide</button>
               </div>
             </div>
           </div>

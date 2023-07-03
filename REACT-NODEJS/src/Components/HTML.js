@@ -13,8 +13,16 @@ const HTMLPage = () => {
           <a href="https://Google.com">Google</a>
         </li>
       </ul>
-      <input type="text"></input>
-      <button>Submit</button>
+      <form>
+        <input type="text"></input>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>        <input type="text"></input>
+
+
+        <input type="submit" value="Submit"></input>
+      </form>
     </div>
   );
 };

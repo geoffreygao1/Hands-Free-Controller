@@ -83,3 +83,13 @@ canvas {
   height: 100%;
   z-index: 10000;
 }
+
+.simple-keyboard.hg-layout-default .hg-button.hg-red {
+  background: rgb(255, 0, 0, 0.7);
+  color: white;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-green {
+  background: rgba(5, 110, 30, 0.7);
+  color: white;
+}

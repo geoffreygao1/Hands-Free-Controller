@@ -23,6 +23,15 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const keyboard = useRef();
   const [activeTextInput, setActiveTextInput] = useState(null);
 
+  const customDisplay = {
+    "{shift}": "⇧",
+    "{space}": "space",
+    "{bksp}": "⌫",
+    "{enter}": "SUBMIT",
+    "{lock}": "CAPS",
+    "{tab}": "CLEAR"
+  };
+
   //Mouse overlay
   useEffect(() => {
     const overlayDiv = document.getElementById('overlayDiv');
@@ -35,6 +44,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       overlayDiv.removeEventListener('mousedown', handleMouseClick);
       overlayDiv.removeEventListener('mouseup', handleMouseRelease);
     };
+
   }, []);
 
   //Handles updating cursor position
@@ -60,7 +70,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     handleInteraction();
   }, [interactionEnabled]);
 
-  //updates active text box when keyboardinput changes
+  //updates active text box when keyboardInput changes
   useEffect(() => {
     if (activeTextInput) {
       activeTextInput.value = keyboardInput;
@@ -152,6 +162,21 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
               case '{bksp}':
                 setKeyboardInput((prevInput) => prevInput.slice(0, -1));
                 break;
+              case '{space}':
+                setKeyboardInput((prevInput) => prevInput + ' ');
+                break;
+              case '{lock}':
+                handleShift()
+                break;
+              case '{shift}':
+                handleShift()
+                break;
+              case '{tab}':
+                setKeyboardInput('');
+                break;
+              case '{enter}':
+                handleKeyboardSubmit();
+                break;
               default:
                 setKeyboardInput((prevInput) => prevInput + buttonValue);
                 break;
@@ -192,6 +217,18 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setKeyboardVisible(false);
   };
 
+  const handleKeyPress = (button) => {
+    if (button === "{shift}" || button === "{lock}") {
+      handleShift();
+    }
+  }
+
+  const handleShift = () => {
+    setLayout(
+      (layout === "default") ? "shift" : "default"
+    );
+  };
+
   return (
     <React.Fragment>
       <div
@@ -216,12 +253,22 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
             <div className="keyboard-container">
               <Keyboard
                 keyboardRef={r => (keyboard.current = r)}
+                theme={"hg-theme-default hg-layout-default myTheme"}
                 layoutName={layout}
                 onChange={handleKeyboardInputChange}
+                onKeyPress={handleKeyPress}
+                display={customDisplay}
+                buttonTheme={[
+                  {
+                    class: "hg-red",
+                    buttons: "{tab}"
+                  },
+                  {
+                    class: "hg-green",
+                    buttons: "{enter}"
+                  }
+                ]}
               />
-              <div>
-                <button onClick={handleKeyboardSubmit}>Submit</button>
-              </div>
             </div>
           </div>
         ) : <></>

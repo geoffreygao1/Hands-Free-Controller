@@ -75,5 +75,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 #### Saturday 07/01/23
 * _Added extension stylings, code cleanup, and debugging_
 
-#### Sunday 07/03/23
+#### Monday 07/03/23
 * _Implementing virtual keyboard_
+

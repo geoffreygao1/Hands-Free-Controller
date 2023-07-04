@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactDOM from "react-dom";
 import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
 import "react-simple-keyboard/build/css/index.css";
@@ -18,11 +17,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Keyboard States
   const [keyboardInput, setKeyboardInput] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
-  const keyboard = useRef();
   const [activeTextInput, setActiveTextInput] = useState(null);
+  const keyboard = useRef();
 
+  //Keyboard Display customizations
   const customDisplay = {
     "{shift}": "⇧",
     "{space}": "space",
@@ -32,7 +31,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     "{tab}": "CLEAR"
   };
 
-  //Mouse overlay
+  //Mouse overlay, allows user to use a mouse as well as webcam input
   useEffect(() => {
     const overlayDiv = document.getElementById('overlayDiv');
     overlayDiv.addEventListener('mousemove', handleMouseMovement);
@@ -57,26 +56,28 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     moveCursor();
   }, [cursorTop, cursorLeft]);
 
-  //Handles cursor click functionaity
+  //Handles cursor click functionaity and changes color
   useEffect(() => {
     if (mouthOpen) {
-      cursorClick();
+      setInteractionEnabled(mouthOpen);
       handleInteraction();
     }
     mouthOpen ? setCursorColor('red') : setCursorColor('blue');
   }, [mouthOpen]);
 
+  //Handles executing the interaction when an cursor is triggered
   useEffect(() => {
     handleInteraction();
   }, [interactionEnabled]);
 
-  //updates active text box when keyboardInput changes
+  //Updates active text box when keyboardInput changes
   useEffect(() => {
     if (activeTextInput) {
       activeTextInput.value = keyboardInput;
     }
   }, [keyboardInput]);
 
+  //Moves the cursor within limitations of window
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -88,12 +89,13 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setCursorLeft(constrainedLeft);
   };
 
+  //Controls cursor movement parameters such as speed and direction
   const handleMove = () => {
     const [direction, magnitude] = cursorDirection;
     //exponentially scales movement farther you drag
     const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.5);
     //Easier to move left and right than up and own
-    const upDownMoveDistance = moveDistance * 2.5;
+    const upDownMoveDistance = moveDistance * 3;
     //Cursor Movement Logic
     if (magnitude) {
       switch (direction) {
@@ -131,9 +133,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     }
   };
 
-  const cursorClick = () => {
-    setInteractionEnabled(mouthOpen);
-  }
 
   const handleInteraction = () => {
     if (interactionEnabled) {
@@ -166,13 +165,15 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
                 setKeyboardInput((prevInput) => prevInput + ' ');
                 break;
               case '{lock}':
-                handleShift()
+                handleKeyPress('{lock}')
                 break;
               case '{shift}':
-                handleShift()
+                handleKeyPress('{shift}')
                 break;
+              //Tab was renaimed to clear
               case '{tab}':
                 setKeyboardInput('');
+                activeTextInput.value = ('');
                 break;
               case '{enter}':
                 handleKeyboardSubmit();
@@ -204,30 +205,19 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setInteractionEnabled(false);
   };
 
-  //Keyboard Functions
-  const handleKeyboardInputChange = (input) => {
-    if (activeTextInput) {
-      activeTextInput.value = input;
-    }
-  };
-
+  //If submit button is pressed, clears and minimizes keyboard input and resets active text input control
   const handleKeyboardSubmit = () => {
     setActiveTextInput(null);
     setKeyboardInput('');
     setKeyboardVisible(false);
   };
 
+  //Toggles caps display of keyboard
   const handleKeyPress = (button) => {
     if (button === "{shift}" || button === "{lock}") {
-      handleShift();
+      setLayout((layout === "default") ? "shift" : "default");
     }
   }
-
-  const handleShift = () => {
-    setLayout(
-      (layout === "default") ? "shift" : "default"
-    );
-  };
 
   return (
     <React.Fragment>
@@ -255,7 +245,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
                 keyboardRef={r => (keyboard.current = r)}
                 theme={"hg-theme-default hg-layout-default myTheme"}
                 layoutName={layout}
-                onChange={handleKeyboardInputChange}
                 onKeyPress={handleKeyPress}
                 display={customDisplay}
                 buttonTheme={[
@@ -276,7 +265,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       </div>
     </React.Fragment >
   );
-
 };
 
 export default Cursor;

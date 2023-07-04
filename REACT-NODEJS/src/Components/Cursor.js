@@ -136,8 +136,8 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   const handleInteraction = () => {
     if (interactionEnabled) {
-      const cursorX = cursorLeft + cursorSize / 2; // Adjusted X coordinate
-      const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
+      const cursorX = cursorLeft + cursorSize / 2;
+      const cursorY = cursorTop + cursorSize / 2;
       const radius = 50; // Adjust the radius value as needed
 
       const elements = document.elementsFromPoint(cursorLeft, cursorTop);
@@ -156,6 +156,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
             setActiveTextInput(element); // Set the active text input
             setKeyboardVisible(true);
           } else if (element.getAttribute('data-skbtn')) {
+            //Implemented because react-simple-keyboard won't interact with mouth triggered click
             const buttonValue = element.getAttribute('data-skbtn');
             switch (buttonValue) {
               case '{bksp}':

@@ -19,6 +19,8 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [layout, setLayout] = useState("default");
   const [activeTextInput, setActiveTextInput] = useState(null);
+  const [keyboardPosition, setKeyboardPosition] = useState({ top: 0, left: 0 });
+  const [keyboardOverlayVisible, setKeyboardOverlayVisible] = useState(false);
   const keyboard = useRef();
 
   //Keyboard Display customizations
@@ -27,7 +29,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     "{space}": "space",
     "{bksp}": "⌫",
     "{enter}": "SUBMIT",
-    "{lock}": "CAPS",
+    "{lock}": "HIDE",
     "{tab}": "CLEAR"
   };
 
@@ -76,6 +78,18 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       activeTextInput.value = keyboardInput;
     }
   }, [keyboardInput]);
+
+  // Updates active text box when keyboardInput changes or when keyboard visibility is toggled
+  useEffect(() => {
+    if (activeTextInput && keyboardVisible) {
+      // Get the position of the active text input element
+      const { top, left, height } = activeTextInput.getBoundingClientRect();
+
+      // Set the position for the keyboard
+      setKeyboardPosition({ top: top + height, left });
+    }
+  }, [keyboardInput, keyboardVisible, activeTextInput]);
+
 
   //Moves the cursor within limitations of window
   const moveCursor = () => {
@@ -155,6 +169,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setActiveTextInput(element); // Set the active text input
             setKeyboardVisible(true);
+            setKeyboardOverlayVisible(true);
           } else if (element.getAttribute('data-skbtn')) {
             //Implemented because react-simple-keyboard won't interact with mouth triggered click
             const buttonValue = element.getAttribute('data-skbtn');
@@ -165,8 +180,9 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
               case '{space}':
                 setKeyboardInput((prevInput) => prevInput + ' ');
                 break;
+              //Caps was renamed to hide
               case '{lock}':
-                handleKeyPress('{lock}')
+                handleKeyboardSubmit();
                 break;
               case '{shift}':
                 handleKeyPress('{shift}')
@@ -235,12 +251,20 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
             background: `${cursorColor}`
           }}>
         </div>
+        {keyboardVisible && (
+          <div
+            className="keyboard-overlay"
+            style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
+          />
+        )}
         {keyboardVisible ? (
-          <div style={{
-            position: 'absolute',
-            bottom: '50px',
-            width: '100%'
-          }}>
+          <div
+            style={{
+              position: 'fixed',
+              top: `${keyboardPosition.top}px`,
+              left: `${keyboardPosition.left}px`,
+            }}
+          >
             <div className="keyboard-container">
               <Keyboard
                 keyboardRef={r => (keyboard.current = r)}
@@ -256,6 +280,10 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
                   {
                     class: "hg-green",
                     buttons: "{enter}"
+                  },
+                  {
+                    class: "hg-yellow",
+                    buttons: "{lock}"
                   }
                 ]}
               />

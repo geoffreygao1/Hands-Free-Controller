@@ -1,3 +1,13 @@
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+}
+
+h3 {
+  color: orange;
+}
+
+/* App styles */
 .App {
   text-align: center;
 }
@@ -38,33 +48,36 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-h3 {
-  color: orange;
-}
-
+/* Webcam styles */
 .webcam-container {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   z-index: 1;
   pointer-events: none;
 }
 
-video,
-canvas {
-  transform: rotateY(180deg);
+.videoBox {
+  display: flex;
+  justify-content: right;
+  padding: 10px;
+
 }
 
+.videoBox video {
+  border-radius: 10px;
+}
+
+.videoBox canvas {
+  position: absolute;
+}
+
+/* Cursor styles */
 .cursor {
   opacity: 50%;
   position: absolute;
-  border-Radius: 50%;
-  transition: all 0.3s ease-out,
-    background-color 0.05s;
+  border-radius: 50%;
+  transition: all 0.3s ease-out, background-color 0.05s;
   z-index: 2;
   pointer-events: none;
 }
@@ -73,12 +86,13 @@ canvas {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: red;
+  background-color: yellow;
   border-radius: 50%;
   opacity: 30%;
   pointer-events: none;
 }
 
+/* Overlay styles */
 #overlayDiv {
   position: fixed;
   top: 0;
@@ -99,16 +113,16 @@ canvas {
   pointer-events: auto;
 }
 
+/* Button container styles */
 .button-container {
   padding: 5px;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 0px;
+  right: 0px;
   z-index: 10000;
-  text-align: center;
 }
 
-/* CSS */
+/* Button styles */
 .button-56 {
   align-items: center;
   background-color: #dafbff;
@@ -119,18 +133,17 @@ canvas {
   cursor: pointer;
   font-family: Inter, sans-serif;
   font-size: 16px;
-  width: 100%;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   justify-content: center;
   line-height: 24px;
-  max-width: 100%;
+  max-width: 80px;
   padding: 0 25px;
   position: relative;
   text-align: center;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  margin: 10px;
+  margin-bottom: 20px;
+  display: flex;
 }
 
 .button-56:after {
@@ -148,24 +161,15 @@ canvas {
   z-index: -1;
 }
 
-.button-56:active {
-  background-color: #ffdeda;
-  outline: 0;
-}
-
-.button-56:hover {
-  outline: 0;
-}
-
+/* Media queries */
 @media (min-width: 768px) {
   .button-56 {
     padding: 0 40px;
   }
 }
 
-
 .simple-keyboard.hg-layout-default .hg-button.hg-red {
-  background: rgb(255, 0, 0, 0.7);
+  background: rgba(255, 0, 0, 0.7);
   color: white;
 }
 

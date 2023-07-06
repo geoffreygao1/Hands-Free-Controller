@@ -267,26 +267,15 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   return (
     <React.Fragment>
-      <div style={{
-        position: 'fixed',
-        bottom: '10px',
-        left: '10px'
-      }}>(x:{cursorTop}, y: {cursorLeft})
-        <div className="button-container">
-          <div>
-            <button className="scrollButton scrollUp button-56" onClick={scrollUp}>
-              <a class="text">&uarr;</a>
-            </button>
-          </div>
-          <br></br>
-          <div>
-            <button className="scrollButton scrollDown button-56" onClick={scrollDown}>
-              <a class="text">&darr;</a>
-            </button>
-          </div>
+      <div className="button-container">
+        <button className="button-56" onClick={scrollUp}>
+          <a class="text">&uarr;</a>
+        </button>
+        <button className="button-56" onClick={scrollDown}>
+          <a class="text">&darr;</a>
+        </button>
 
-          <div className="button-overlay" />
-        </div>
+        <div className="button-overlay" />
       </div>
       <div
         id="overlayDiv"

@@ -61,15 +61,16 @@ h3 {
   display: flex;
   justify-content: right;
   padding: 10px;
-
 }
 
 .videoBox video {
   border-radius: 10px;
+  transform: scaleX(-1);
 }
 
 .videoBox canvas {
   position: absolute;
+  transform: scaleX(-1);
 }
 
 /* Cursor styles */

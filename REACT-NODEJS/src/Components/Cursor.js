@@ -23,6 +23,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [keyboardOverlayVisible, setKeyboardOverlayVisible] = useState(false);
   const keyboard = useRef();
 
+  //Scroll States
+  const [pageHeight, setPageHeight] = useState(0);
+  const [scrollAmt, setScrollAmt] = useState(0);
+  const [currentWindowHeight, setCurrentWindowHeight] = useState(0);
+
   //Keyboard Display customizations
   const customDisplay = {
     "{shift}": "⇧",
@@ -39,6 +44,9 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     overlayDiv.addEventListener('mousemove', handleMouseMovement);
     overlayDiv.addEventListener('mousedown', handleMouseClick);
     overlayDiv.addEventListener('mouseup', handleMouseRelease);
+    window.addEventListener("scroll", handleScroll);
+    setPageHeight(document.body.scrollHeight);
+    setCurrentWindowHeight(window.innerHeight);
 
     return () => {
       overlayDiv.removeEventListener('mousemove', handleMouseMovement);
@@ -84,21 +92,24 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     if (activeTextInput && keyboardVisible) {
       // Get the position of the active text input element
       const { top, left, height } = activeTextInput.getBoundingClientRect();
-
       // Set the position for the keyboard
       setKeyboardPosition({ top: top + height, left });
     }
   }, [keyboardInput, keyboardVisible, activeTextInput]);
 
+  //Handles Scroll Changing
+  useEffect(() => {
+    handleScroll();
+  }, [scrollAmt, cursorTop]);
 
   //Moves the cursor within limitations of window
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    const windowHeight = document.body.scrollHeight;
 
     // Constrain cursor movement within the window boundaries
-    const constrainedTop = Math.max(Math.min(cursorTop, windowHeight - cursorSize), 0);
-    const constrainedLeft = Math.max(Math.min(cursorLeft, windowWidth - cursorSize), 0);
+    const constrainedTop = Math.max(Math.min(cursorTop, windowHeight), 0);
+    const constrainedLeft = Math.max(Math.min(cursorLeft, windowWidth), 0);
     setCursorTop(constrainedTop);
     setCursorLeft(constrainedLeft);
   };
@@ -236,8 +247,21 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     }
   }
 
+  const handleScroll = () => {
+    // const x = cursorTop;
+    // const y = cursorLeft;
+    setScrollAmt(window.scrollY);
+    // console.log('scroll position: ' + scrollAmt);
+    // console.log('window height: ' + document.body.scrollHeight);
+    // console.log('y:' + `${x}`)
+  }
+
   return (
     <React.Fragment>
+      <div style={{
+        position: 'fixed'
+      }}>(x:{cursorTop}, y: {cursorLeft})
+      </div>
       <div
         id="overlayDiv"
         className="overlay">

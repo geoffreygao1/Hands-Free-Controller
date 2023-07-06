@@ -7,9 +7,9 @@
 ## Technologies Used
 
 * _Javascript/React_
-* _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
-* _[react-simple-keyboard](https://github.com/hodgef/react-simple-keyboard)
 * _Node.js_
+  * _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
+  * _[react-simple-keyboard](https://github.com/hodgef/react-simple-keyboard)_
 * _Chrome Extension_
 
 ## Description
@@ -32,7 +32,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
   * _Scroll Buttons_
-  * _Virtual Keyboard_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_

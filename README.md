@@ -31,7 +31,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
 ### _Near Term To Do List:_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
-  * _Scroll Buttons_
+  * _Cursor Control_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_

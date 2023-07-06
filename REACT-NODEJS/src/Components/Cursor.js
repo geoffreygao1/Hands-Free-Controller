@@ -118,7 +118,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const handleMove = () => {
     const [direction, magnitude] = cursorDirection;
     //exponentially scales movement farther you drag
-    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.5);
+    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.8);
     //Easier to move left and right than up and own
     const upDownMoveDistance = moveDistance * 3;
     //Cursor Movement Logic

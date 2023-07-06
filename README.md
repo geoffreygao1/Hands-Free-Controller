@@ -77,3 +77,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 #### Monday 07/03/23
 * _Implementing virtual keyboard_
 
+#### Wednesday 07/05/23
+* _Scroll Buttons_
+

@@ -256,11 +256,27 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     // console.log('y:' + `${x}`)
   }
 
+  const scrollUp = () => {
+    window.scrollBy(0, currentWindowHeight * -0.8);
+  }
+
+  const scrollDown = () => {
+    window.scrollBy(0, currentWindowHeight * 0.8);
+  }
+
   return (
     <React.Fragment>
       <div style={{
-        position: 'fixed'
+        position: 'fixed',
+        bottom: '10px',
+        right: '10px'
       }}>(x:{cursorTop}, y: {cursorLeft})
+        <div>
+          <button onClick={scrollUp}>Scroll Up</button>
+        </div>
+        <div>
+          <button onClick={scrollDown}>Scroll Down</button>
+        </div>
       </div>
       <div
         id="overlayDiv"

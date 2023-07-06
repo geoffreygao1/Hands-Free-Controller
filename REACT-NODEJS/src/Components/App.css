@@ -38,6 +38,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 h3 {
   color: orange;
 }

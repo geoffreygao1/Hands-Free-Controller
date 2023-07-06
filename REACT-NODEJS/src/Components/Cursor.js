@@ -31,11 +31,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Keyboard Display customizations
   const customDisplay = {
     "{shift}": "⇧",
-    "{space}": "space",
+    "{space}": " ",
     "{bksp}": "⌫",
-    "{enter}": "SUBMIT",
-    "{lock}": "HIDE",
-    "{tab}": "CLEAR"
+    "{enter}": "Submit",
+    "{lock}": "Hide",
+    "{tab}": "Clear"
   };
 
   //Mouse overlay, allows user to use a mouse as well as webcam input

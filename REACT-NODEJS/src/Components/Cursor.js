@@ -106,9 +106,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
     const windowHeight = document.body.scrollHeight;
+    // Calculate the maximum top position to stay within the visible window
+    const maxTop = document.documentElement.clientHeight;
 
     // Constrain cursor movement within the window boundaries
-    const constrainedTop = Math.max(Math.min(cursorTop, windowHeight), 0);
+    const constrainedTop = Math.max(Math.min(cursorTop, maxTop), 0);
     const constrainedLeft = Math.max(Math.min(cursorLeft, windowWidth), 0);
     setCursorTop(constrainedTop);
     setCursorLeft(constrainedLeft);

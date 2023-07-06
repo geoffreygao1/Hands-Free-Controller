@@ -171,6 +171,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         const elementX = elementRect.left + elementRect.width / 2;
         const elementY = elementRect.top + elementRect.height / 2;
 
+        //radius of click
         const distance = Math.sqrt(
           Math.pow(cursorX - elementX, 2) + Math.pow(cursorY - elementY, 2)
         );
@@ -269,13 +270,22 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       <div style={{
         position: 'fixed',
         bottom: '10px',
-        right: '10px'
+        left: '10px'
       }}>(x:{cursorTop}, y: {cursorLeft})
-        <div>
-          <button onClick={scrollUp}>Scroll Up</button>
-        </div>
-        <div>
-          <button onClick={scrollDown}>Scroll Down</button>
+        <div className="button-container">
+          <div>
+            <button className="scrollButton scrollUp button-56" onClick={scrollUp}>
+              <a class="text">&uarr;</a>
+            </button>
+          </div>
+          <br></br>
+          <div>
+            <button className="scrollButton scrollDown button-56" onClick={scrollDown}>
+              <a class="text">&darr;</a>
+            </button>
+          </div>
+
+          <div className="button-overlay" />
         </div>
       </div>
       <div

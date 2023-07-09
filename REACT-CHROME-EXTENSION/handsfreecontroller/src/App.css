@@ -3,10 +3,6 @@ html {
   scroll-behavior: smooth;
 }
 
-h3 {
-  color: orange;
-}
-
 /* App styles */
 .App {
   text-align: center;
@@ -51,10 +47,9 @@ h3 {
 /* Webcam styles */
 .webcam-container {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
+  top: 0;
+  right: 0;
+  z-index: 10000;
 }
 
 .videoBox {

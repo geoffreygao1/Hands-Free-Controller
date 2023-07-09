@@ -3,10 +3,6 @@ html {
   scroll-behavior: smooth;
 }
 
-h3 {
-  color: orange;
-}
-
 /* App styles */
 .App {
   text-align: center;
@@ -53,7 +49,7 @@ h3 {
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 10000;
   pointer-events: none;
 }
 

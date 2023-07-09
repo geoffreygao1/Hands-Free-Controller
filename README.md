@@ -1,12 +1,10 @@
 # _Hands Free Controller_
 
-#### By _Geoffrey Gao_
-
 #### _An accessibility application that allows for hands-free control of a web browser using webcam input._
 
 ## Technologies Used
 
-* _Javascript/React_
+* _JavaScript/React_
 * _Node.js_
   * _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
   * _[react-simple-keyboard](https://github.com/hodgef/react-simple-keyboard)_

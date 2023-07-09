@@ -12,9 +12,9 @@
 
 ## Description
 
-_An accessibility application that allows for hands-free control of a web browser using webcam input. Uses face recognition through face-api to determine cursor movement and action. Includes functionality that allows users to click, scroll, and input text using various head/face motions/expressions. Can be run locally (using Node.js) or in the browser as a Chrome Extension_
+_An accessibility application that allows for hands-free control of a web browser using webcam input. Uses face recognition through face-api to determine cursor movement and action. Includes functionality that allows users to click, scroll, and input text using various head/face motions/expressions. Can be run local/server-side(using Node.js) or in the browser as a Chrome Extension_
 
-## Installation Instructions
+## Setup/Installation Requirements
 
 _The application is available in two formats, one that can be run using Manifest V3 as a Google Chrome extension and one that can be run server-side using NodeJS. Please follow the instructions below for each type:_
 

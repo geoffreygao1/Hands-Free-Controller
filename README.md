@@ -91,3 +91,5 @@ Copyright (c) _2023_ _Geoffrey Gao_
 #### Wednesday 07/05/23
 * _Scroll Buttons_
 
+#### Sunday 07/09/23
+* _Updated Chrome Extension Version_

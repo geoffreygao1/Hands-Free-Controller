@@ -10,11 +10,23 @@
 * _Node.js_
   * _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_
   * _[react-simple-keyboard](https://github.com/hodgef/react-simple-keyboard)_
-* _Chrome Extension_
+* _Manifest V3 (Chrome Extension)_
 
 ## Description
 
 _An accessibility application that allows for hands-free control of a web browser using webcam input. Uses face recognition through face-api to determine cursor movement and action. Includes functionality that allows users to click, scroll, and input text using various head/face motions/expressions. Can be run locally (using Node.js) or in the browser as a Chrome Extension_
+
+## Installation Instructions
+
+_The application is available in two formats, one that can be run using Manifest V3 as a Google Chrome extension and one that can be run server-side using NodeJS. Please follow the instructions below for each type:_
+
+### Chrome Extension
+* _Clone the repository and locate the folder `extension` within the `Chrome Extension` folder_
+* _Open Google Chrome and navigate to `Chrome://Extensions` in the address bar_
+* _Turn on the switch on the top right of the page that says "Developer Mode"_
+* _Click on the button on the top left of the page that says "Load unpacked". Then select the location of the `extension` folder_ 
+
+_Note: The extension files can be rebuilt if any modifications are to be made. The source code can be found in the `handsfreecontroller` folder. The `content.js` file can be regenerated using `NPM run build` in the terminal_
 
 ## Known Bugs
 

@@ -101,6 +101,7 @@ function App() {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         //Draw on canvas
+        canvasRef.current.getContext('2d', { willReadFrequently: true });
         canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
         canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
 

@@ -1,23 +1,85 @@
-.container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 10000;
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+}
+
+h3 {
+  color: orange;
+}
+
+/* App styles */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
   pointer-events: none;
 }
 
-video,
-canvas {
-  transform: rotateY(180deg);
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Webcam styles */
+.webcam-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.videoBox {
+  display: flex;
+  justify-content: right;
+  padding: 10px;
+}
+
+.videoBox video {
+  border-radius: 10px;
+  transform: scaleX(-1);
+}
+
+.videoBox canvas {
+  position: absolute;
+  transform: scaleX(-1);
+}
+
+/* Cursor styles */
 .cursor {
   opacity: 50%;
   position: absolute;
-  border-Radius: 50%;
-  transition: all 0.3s ease-out,
-    background-color 0.05s;
-  z-index: 10000;
+  border-radius: 50%;
+  transition: all 0.3s ease-out, background-color 0.05s;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -25,20 +87,99 @@ canvas {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: red;
+  background-color: yellow;
   border-radius: 50%;
   opacity: 30%;
   pointer-events: none;
 }
 
+/* Overlay styles */
 #overlayDiv {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 10000;
-  /* Set a high value to bring it to the top */
-  pointer-events: none;
-  /* Make the overlay div transparent to pointer events */
+}
+
+.keyboard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 99;
+  pointer-events: auto;
+}
+
+/* Button container styles */
+.button-container {
+  padding: 5px;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  z-index: 10000;
+}
+
+/* Button styles */
+.button-56 {
+  align-items: center;
+  background-color: #dafbff;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 80px;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.button-56:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 48px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+/* Media queries */
+@media (min-width: 768px) {
+  .button-56 {
+    padding: 0 40px;
+  }
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-red {
+  background: rgba(255, 0, 0, 0.7);
+  color: white;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-green {
+  background: rgba(5, 110, 30, 0.7);
+  color: white;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-yellow {
+  background: rgba(255, 230, 0, 0.7);
+  color: rgb(0, 0, 0);
 }

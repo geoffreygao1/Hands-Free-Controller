@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
-
+import "react-simple-keyboard/build/css/index.css";
 
 const Cursor = ({ cursorDirection, mouthOpen }) => {
   //Cursor Position and movement states
@@ -13,18 +14,46 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setCursorColor] = useState('blue');
 
-  //Mouse overlay
+  //Keyboard States
+  const [keyboardInput, setKeyboardInput] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [layout, setLayout] = useState("default");
+  const [activeTextInput, setActiveTextInput] = useState(null);
+  const [keyboardPosition, setKeyboardPosition] = useState({ top: 0, left: 0 });
+  const [keyboardOverlayVisible, setKeyboardOverlayVisible] = useState(false);
+  const keyboard = useRef();
+
+  //Scroll States
+  const [pageHeight, setPageHeight] = useState(0);
+  const [scrollAmt, setScrollAmt] = useState(0);
+  const [currentWindowHeight, setCurrentWindowHeight] = useState(0);
+
+  //Keyboard Display customizations
+  const customDisplay = {
+    "{shift}": "⇧",
+    "{space}": " ",
+    "{bksp}": "⌫",
+    "{enter}": "Submit",
+    "{lock}": "Hide",
+    "{tab}": "Clear"
+  };
+
+  //Mouse overlay, allows user to use a mouse as well as webcam input
   useEffect(() => {
     const overlayDiv = document.getElementById('overlayDiv');
     overlayDiv.addEventListener('mousemove', handleMouseMovement);
     overlayDiv.addEventListener('mousedown', handleMouseClick);
     overlayDiv.addEventListener('mouseup', handleMouseRelease);
+    window.addEventListener("scroll", handleScroll);
+    setPageHeight(document.body.scrollHeight);
+    setCurrentWindowHeight(window.innerHeight);
 
     return () => {
       overlayDiv.removeEventListener('mousemove', handleMouseMovement);
       overlayDiv.removeEventListener('mousedown', handleMouseClick);
       overlayDiv.removeEventListener('mouseup', handleMouseRelease);
     };
+
   }, []);
 
   //Handles updating cursor position
@@ -37,33 +66,63 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     moveCursor();
   }, [cursorTop, cursorLeft]);
 
-  //Handles cursor click functionaity
+  //Handles cursor click functionaity and changes color
   useEffect(() => {
-    cursorClick();
-    handleInteraction();
+    if (mouthOpen) {
+      setInteractionEnabled(mouthOpen);
+      handleInteraction();
+    }
+    mouthOpen ? setCursorColor('red') : setCursorColor('blue');
   }, [mouthOpen]);
 
+  //Handles executing the interaction when an cursor is triggered
   useEffect(() => {
     handleInteraction();
   }, [interactionEnabled]);
 
+  //Updates active text box when keyboardInput changes
+  useEffect(() => {
+    if (activeTextInput) {
+      activeTextInput.value = keyboardInput;
+    }
+  }, [keyboardInput]);
+
+  // Updates active text box when keyboardInput changes or when keyboard visibility is toggled
+  useEffect(() => {
+    if (activeTextInput && keyboardVisible) {
+      // Get the position of the active text input element
+      const { top, left, height } = activeTextInput.getBoundingClientRect();
+      // Set the position for the keyboard
+      setKeyboardPosition({ top: top + height, left });
+    }
+  }, [keyboardInput, keyboardVisible, activeTextInput]);
+
+  //Handles Scroll Changing
+  useEffect(() => {
+    handleScroll();
+  }, [scrollAmt, cursorTop]);
+
+  //Moves the cursor within limitations of window
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    const windowHeight = document.body.scrollHeight;
+    // Calculate the maximum top position to stay within the visible window
+    const maxTop = document.documentElement.clientHeight;
 
     // Constrain cursor movement within the window boundaries
-    const constrainedTop = Math.max(Math.min(cursorTop, windowHeight - cursorSize), 0);
-    const constrainedLeft = Math.max(Math.min(cursorLeft, windowWidth - cursorSize), 0);
+    const constrainedTop = Math.max(Math.min(cursorTop, maxTop), 0);
+    const constrainedLeft = Math.max(Math.min(cursorLeft, windowWidth), 0);
     setCursorTop(constrainedTop);
     setCursorLeft(constrainedLeft);
   };
 
+  //Controls cursor movement parameters such as speed and direction
   const handleMove = () => {
     const [direction, magnitude] = cursorDirection;
     //exponentially scales movement farther you drag
-    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.5);
+    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.8);
     //Easier to move left and right than up and own
-    const upDownMoveDistance = moveDistance * 2.5;
+    const upDownMoveDistance = moveDistance * 3;
     //Cursor Movement Logic
     if (magnitude) {
       switch (direction) {
@@ -101,15 +160,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     }
   };
 
-  const cursorClick = () => {
-    mouthOpen ? setCursorColor('red') : setCursorColor('blue');
-    setInteractionEnabled(mouthOpen);
-  }
 
   const handleInteraction = () => {
     if (interactionEnabled) {
-      const cursorX = cursorLeft + cursorSize / 2; // Adjusted X coordinate
-      const cursorY = cursorTop + cursorSize / 2; // Adjusted Y coordinate
+      const cursorX = cursorLeft + cursorSize / 2;
+      const cursorY = cursorTop + cursorSize / 2;
       const radius = 50; // Adjust the radius value as needed
 
       const elements = document.elementsFromPoint(cursorLeft, cursorTop);
@@ -118,18 +173,49 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
         const elementX = elementRect.left + elementRect.width / 2;
         const elementY = elementRect.top + elementRect.height / 2;
 
+        //radius of click
         const distance = Math.sqrt(
           Math.pow(cursorX - elementX, 2) + Math.pow(cursorY - elementY, 2)
         );
 
         if (distance <= radius) {
-          // Trigger click event on the element
-          const clickEvent = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-          });
-          element.dispatchEvent(clickEvent);
+          //Checks if element is an text input to open keyboard
+          if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
+            setActiveTextInput(element); // Set the active text input
+            setKeyboardVisible(true);
+            setKeyboardOverlayVisible(true);
+          } else if (element.getAttribute('data-skbtn')) {
+            //Implemented because react-simple-keyboard won't interact with mouth triggered click
+            const buttonValue = element.getAttribute('data-skbtn');
+            switch (buttonValue) {
+              case '{bksp}':
+                setKeyboardInput((prevInput) => prevInput.slice(0, -1));
+                break;
+              case '{space}':
+                setKeyboardInput((prevInput) => prevInput + ' ');
+                break;
+              //Caps was renamed to hide
+              case '{lock}':
+                handleKeyboardSubmit();
+                break;
+              case '{shift}':
+                handleKeyPress('{shift}')
+                break;
+              //Tab was renaimed to clear
+              case '{tab}':
+                setKeyboardInput('');
+                activeTextInput.value = ('');
+                break;
+              case '{enter}':
+                handleKeyboardSubmit();
+                break;
+              default:
+                setKeyboardInput((prevInput) => prevInput + buttonValue);
+                break;
+            }
+          } else {
+            element.click();
+          }
         }
       });
     }
@@ -150,34 +236,105 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     setInteractionEnabled(false);
   };
 
+  //If submit button is pressed, clears and minimizes keyboard input and resets active text input control
+  const handleKeyboardSubmit = () => {
+    setActiveTextInput(null);
+    setKeyboardInput('');
+    setKeyboardVisible(false);
+  };
+
+  //Toggles caps display of keyboard
+  const handleKeyPress = (button) => {
+    if (button === "{shift}" || button === "{lock}") {
+      setLayout((layout === "default") ? "shift" : "default");
+    }
+  }
+
+  const handleScroll = () => {
+    // const x = cursorTop;
+    // const y = cursorLeft;
+    setScrollAmt(window.scrollY);
+    // console.log('scroll position: ' + scrollAmt);
+    // console.log('window height: ' + document.body.scrollHeight);
+    // console.log('y:' + `${x}`)
+  }
+
+  const scrollUp = () => {
+    window.scrollBy(0, currentWindowHeight * -0.8);
+  }
+
+  const scrollDown = () => {
+    window.scrollBy(0, currentWindowHeight * 0.8);
+  }
+
   return (
     <React.Fragment>
+      <div className="button-container">
+        <button className="button-56" onClick={scrollUp}>
+          <a class="text">&uarr;</a>
+        </button>
+        <button className="button-56" onClick={scrollDown}>
+          <a class="text">&darr;</a>
+        </button>
+
+        <div className="button-overlay" />
+      </div>
       <div
         id="overlayDiv"
-        className="overlay"
-        style={{
-          pointerEvents: 'auto'
-        }}
-      />
-      <div
-        className="cursor"
-        style={{
-          width: `${cursorSize}px`,
-          height: `${cursorSize}px`,
-          top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
-          left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
-          background: `${cursorColor}`
+        className="overlay">
+        <div
+          className="cursor"
+          style={{
+            width: `${cursorSize}px`,
+            height: `${cursorSize}px`,
+            top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
+            left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
+            background: `${cursorColor}`
+          }}>
+        </div>
+        {keyboardVisible && (
+          <div
+            className="keyboard-overlay"
+            style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
+          />
+        )}
+        {keyboardVisible ? (
+          <div
+            style={{
+              position: 'fixed',
+              top: `${keyboardPosition.top}px`,
+              left: `${keyboardPosition.left}px`,
+            }}
+          >
+            <div className="keyboard-container">
+              <Keyboard
+                keyboardRef={r => (keyboard.current = r)}
+                theme={"hg-theme-default hg-layout-default myTheme"}
+                layoutName={layout}
+                onKeyPress={handleKeyPress}
+                display={customDisplay}
+                buttonTheme={[
+                  {
+                    class: "hg-red",
+                    buttons: "{tab}"
+                  },
+                  {
+                    class: "hg-green",
+                    buttons: "{enter}"
+                  },
+                  {
+                    class: "hg-yellow",
+                    buttons: "{lock}"
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        ) : <></>
         }
-        }
-      />
-    </React.Fragment>
+      </div>
+    </React.Fragment >
   );
 };
 
 export default Cursor;
-
-
-
-
-
-

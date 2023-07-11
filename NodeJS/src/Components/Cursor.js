@@ -284,24 +284,21 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
   return (
     <React.Fragment>
       <div className="scroll-button-container">
-        <button className="button-56" onClick={scrollUp}>
+        <button className="button-56" style={
+          { backgroundColor: cursorControlMode === 'absolute' ? '#dafbff' : '#111', color: cursorControlMode === 'absolute' ? '#111' : "#dafbff" }
+        } onClick={toggleCursorControlMode}>
+          <a className="text">{cursorControlMode === "absolute" ? 'A' : 'R'}</a>
+        </button>
+        <button className="button-56 scrollUp" onClick={scrollUp}>
           <a className="text">&uarr;</a>
         </button>
-        <button className="button-56" onClick={scrollDown}>
+        <button className="button-56 scrollDown" onClick={scrollDown}>
           <a className="text">&darr;</a>
         </button>
-      </div>
-
-      <div className="controlToggle-button-container">
-        <input className="tgl tgl-flip" id="cb5" type="checkbox" onClick={toggleCursorControlMode} />
-        <label className="tgl-btn" data-tg-off="Absolute" data-tg-on="Relative" htmlFor="cb5"></label>
-      </div>
-
-
-
-      <div
+      </div >
+      < div
         id="overlayDiv"
-        className="overlay">
+        className="overlay" >
         <div
           className="cursor"
           style={{
@@ -312,47 +309,50 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
             background: `${cursorColor}`
           }}>
         </div>
-        {keyboardVisible && (
-          <div
-            className="keyboard-overlay"
-            style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
-          />
-        )}
-        {keyboardVisible ? (
-          <div
-            style={{
-              position: 'fixed',
-              top: `${keyboardPosition.top}px`,
-              left: `${keyboardPosition.left}px`,
-            }}
-          >
-            <div className="keyboard-container">
-              <Keyboard
-                keyboardRef={r => (keyboard.current = r)}
-                theme={"hg-theme-default hg-layout-default myTheme"}
-                layoutName={layout}
-                onKeyPress={handleKeyPress}
-                display={customDisplay}
-                buttonTheme={[
-                  {
-                    class: "hg-red",
-                    buttons: "{tab}"
-                  },
-                  {
-                    class: "hg-green",
-                    buttons: "{enter}"
-                  },
-                  {
-                    class: "hg-yellow",
-                    buttons: "{lock}"
-                  }
-                ]}
-              />
-            </div>
-          </div>
-        ) : <></>
+        {
+          keyboardVisible && (
+            <div
+              className="keyboard-overlay"
+              style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
+            />
+          )
         }
-      </div>
+        {
+          keyboardVisible ? (
+            <div
+              style={{
+                position: 'fixed',
+                top: `${keyboardPosition.top}px`,
+                left: `${keyboardPosition.left}px`,
+              }}
+            >
+              <div className="keyboard-container">
+                <Keyboard
+                  keyboardRef={r => (keyboard.current = r)}
+                  theme={"hg-theme-default hg-layout-default myTheme"}
+                  layoutName={layout}
+                  onKeyPress={handleKeyPress}
+                  display={customDisplay}
+                  buttonTheme={[
+                    {
+                      class: "hg-red",
+                      buttons: "{tab}"
+                    },
+                    {
+                      class: "hg-green",
+                      buttons: "{enter}"
+                    },
+                    {
+                      class: "hg-yellow",
+                      buttons: "{lock}"
+                    }
+                  ]}
+                />
+              </div>
+            </div>
+          ) : <></>
+        }
+      </div >
     </React.Fragment >
   );
 };

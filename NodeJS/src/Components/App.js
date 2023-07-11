@@ -97,8 +97,10 @@ function App() {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         //Draw on canvas
+        canvasRef.current.getContext('2d', { willReadFrequently: true });
         canvasRef && canvasRef.current && canvasRef.current.getContext('2d', { willReadFrequently: true });
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current.getContext('2d', { willReadFrequently: true }), resizedDetections);
+        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+
 
         //Output points
         if (resizedDetections[0] && resizedDetections[0]['landmarks']._positions.length === 68) {

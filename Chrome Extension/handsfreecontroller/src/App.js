@@ -4,7 +4,6 @@ import './App.css';
 import Cursor from './Cursor.js';
 /*global chrome*/
 
-
 function App() {
 
   //State for face recognition remodel loaded, captureVideo started, and videoLoaded to web page
@@ -12,15 +11,14 @@ function App() {
   const [captureVideo, setCaptureVideo] = React.useState(false);
   const [videoLoaded, setVideoLoaded] = React.useState(false);
 
-
-
   //States for face coordinates
-  //May need to change to single object to simplify
-  const [leftEyeCoordinate, setleftEyeCoordinate] = React.useState([]);
-  const [rightEyeCoordinate, setrightEyeCoordinate] = React.useState([]);
-  const [noseCoordinate, setnoseCoordinate] = React.useState([]);
-  const [mouthBottomCoordinate, setmouthBottomCoordinate] = React.useState([]);
-  const [mouthTopCoordinate, setmouthTopCoordinate] = React.useState([]);
+  const [faceCoordinates, setFaceCoordinates] = React.useState({
+    "leftEye": { 'x': 0, 'y': 0 },
+    "rightEye": { 'x': 0, 'y': 0 },
+    "nose": { 'x': 0, 'y': 0 },
+    "mouthBot": { 'x': 0, 'y': 0 },
+    "mouthTop": { 'x': 0, 'y': 0 }
+  });
   const [avgFacePosition, setavgFacePosition] = React.useState([]);
 
   //States for mouth status (open/close)
@@ -28,6 +26,7 @@ function App() {
 
   //State for cursor control
   const deadZone = 15;
+  const mouthClickThreshold = 8;
   const [distanceToCenter, setdistanceToCenter] = React.useState(0);
   const [cursorDirection, setCursorDirection] = React.useState([]);
 
@@ -64,7 +63,7 @@ function App() {
     calculateAvgFacePosition();
     processDirection();
     processMouthTrigger();
-  }, [noseCoordinate]);
+  }, [faceCoordinates]);
 
   //Handle initiate Webcam
   const startVideo = () => {
@@ -117,19 +116,16 @@ function App() {
   //Save face landmark coordinates to state
   const collectLandmarks = (resizedDetections) => {
     var landmarksOutput = resizedDetections[0]['landmarks']._positions;
-    setleftEyeCoordinate(landmarksOutput[20]);
-    setrightEyeCoordinate(landmarksOutput[25]);
-    setnoseCoordinate(landmarksOutput[31]);
-    setmouthBottomCoordinate(landmarksOutput[58]);
-    setmouthTopCoordinate(landmarksOutput[52]);
+    setFaceCoordinates({
+      "nose": landmarksOutput[31],
+      "mouthBot": landmarksOutput[58],
+      "mouthTop": landmarksOutput[52]
+    });
   }
-
 
   // Calculates center of face based on landmark locations
   const calculateAvgFacePosition = () => {
-    const avgX = (leftEyeCoordinate.x + rightEyeCoordinate.x + noseCoordinate.x + mouthBottomCoordinate.x) / 4;
-    const avgY = (leftEyeCoordinate.y + rightEyeCoordinate.y + noseCoordinate.y + mouthBottomCoordinate.y) / 4;
-    setavgFacePosition([Number.parseFloat(avgX).toFixed(1), Number.parseFloat(avgY).toFixed(1)]);
+    setavgFacePosition([videoWidth - Number.parseFloat(faceCoordinates.nose.x).toFixed(2), Number.parseFloat(faceCoordinates.nose.y).toFixed(2)]);
   }
 
   //Calculate direction based on landmark coordinates and dead zone
@@ -156,53 +152,52 @@ function App() {
     } else if (angle > -112 && angle < -68) {
       setCursorDirection(["up", distanceToCenter]);
     } else if (angle > -157 && angle < -113) {
-      setCursorDirection(["up-right", distanceToCenter]);
+      setCursorDirection(["up-left", distanceToCenter]);
     } else if (angle > 158 || angle < -158) {
-      setCursorDirection(["right", distanceToCenter]);
+      setCursorDirection(["left", distanceToCenter]);
     } else if (angle > 113 && angle < 157) {
-      setCursorDirection(["down-right", distanceToCenter]);
+      setCursorDirection(["down-left", distanceToCenter]);
     } else if (angle > 68 && angle < 112) {
       setCursorDirection(["down", distanceToCenter]);
     } else if (angle > 23 && angle < 67) {
-      setCursorDirection(["down-left", distanceToCenter]);
+      setCursorDirection(["down-right", distanceToCenter]);
     } else if (angle > -22 && angle < 22) {
-      setCursorDirection(["left", distanceToCenter]);
+      setCursorDirection(["right", distanceToCenter]);
     } else if (angle > -67 && angle < -23) {
-      setCursorDirection(["up-left", distanceToCenter]);
+      setCursorDirection(["up-right", distanceToCenter]);
     }
   }
 
   const processMouthTrigger = () => {
-    const mouthTop = [mouthTopCoordinate._x, mouthTopCoordinate._y];
-    const mouthBot = [mouthBottomCoordinate._x, mouthBottomCoordinate._y];
+    const mouthTop = [faceCoordinates.mouthTop.x, faceCoordinates.mouthTop.y];
+    const mouthBot = [faceCoordinates.mouthBot.x, faceCoordinates.mouthBot.y];
     const mouthOpenDistance = Math.sqrt(Math.pow((mouthTop[0] - mouthBot[0]), 2) + Math.pow((mouthTop[1] - mouthBot[1]), 2));
-    (mouthOpenDistance > 10) ? setmouthOpen(true) : setmouthOpen(false);
+    (mouthOpenDistance > mouthClickThreshold) ? setmouthOpen(true) : setmouthOpen(false);
   }
 
   return (
     <React.Fragment>
-      <div >
-        {
-          captureVideo ?
-            (
-              modelsLoaded ?
-                (<div className="webcam-container" >
-                  <div className="videoBox" >
-                    <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} />
-                    <canvas ref={canvasRef} />
-                    {
-                      videoLoaded ? (<span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />) : <></>
-                    }
-                  </div>
-                </div>)
-                :
-                <div>loading...</div>
-            ) : <></>
-        }
-      </div >
-      {videoLoaded ? (<Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} />) : <></>}
+      {
+        captureVideo ?
+          (
+            modelsLoaded ?
+              (<div className="webcam-container">
+                <div className="videoBox">
+                  <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} />
+                  <canvas ref={canvasRef} />
+                  {
+                    videoLoaded ? (<span className="deadzone" style={{ top: videoHeight / 2, right: videoWidth / 2 }} />) : <></>
+                  }
+                </div>
+              </div>)
+              :
+              <div>loading...</div>
+          ) : <></>
+      }
+      {videoLoaded ? (<Cursor cursorDirection={cursorDirection} mouthOpen={mouthOpen} avgFacePosition={avgFacePosition} videoWidth={videoWidth} videoHeight={videoHeight} />) : <></>}
     </React.Fragment>
   );
+
 }
 
 export default App;

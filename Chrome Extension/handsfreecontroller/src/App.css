@@ -3,53 +3,14 @@ html {
   scroll-behavior: smooth;
 }
 
-/* App styles */
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Webcam styles */
 .webcam-container {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 0px;
   z-index: 10000;
+  opacity: 70%;
+  pointer-events: none;
 }
 
 .videoBox {
@@ -82,9 +43,9 @@ html {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: yellow;
+  background-color: red;
   border-radius: 50%;
-  opacity: 30%;
+  opacity: 50%;
   pointer-events: none;
 }
 
@@ -100,19 +61,24 @@ html {
 
 .keyboard-overlay {
   position: fixed;
+  display: block;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: transparent;
-  z-index: 99;
-  pointer-events: auto;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.keyboard-container {
+  padding-top: 5px;
 }
 
 /* Button container styles */
 .button-container {
-  padding: 5px;
   position: fixed;
+  margin: 5px;
   bottom: 0px;
   right: 0px;
   z-index: 10000;
@@ -122,24 +88,23 @@ html {
 .button-56 {
   align-items: center;
   background-color: #dafbff;
-  border: 2px solid #111;
+  border: 2px solid #000000;
   border-radius: 8px;
   box-sizing: border-box;
-  color: #111;
+  color: #000080;
   cursor: pointer;
   font-family: Inter, sans-serif;
-  font-size: 16px;
   width: 50px;
   height: 50px;
   justify-content: center;
   line-height: 24px;
   max-width: 80px;
-  padding: 0 25px;
   position: relative;
   text-align: center;
-  margin: 10px;
-  margin-bottom: 20px;
   display: flex;
+  font-weight: bolder;
+  font-size: 22px;
+  margin: 10px 10px 25px 5px;
 }
 
 .button-56:after {

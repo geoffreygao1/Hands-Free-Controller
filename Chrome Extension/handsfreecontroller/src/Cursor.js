@@ -3,7 +3,7 @@ import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
 import "react-simple-keyboard/build/css/index.css";
 
-const Cursor = ({ cursorDirection, mouthOpen }) => {
+const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, videoHeight }) => {
   //Cursor Position and movement states
   const [cursorTop, setCursorTop] = useState(window.innerHeight / 2);
   const [cursorLeft, setCursorLeft] = useState(window.innerWidth / 2);
@@ -11,6 +11,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const cursorStep = 0.07; // Adjust this value to change cursor movement speed
 
   //Cursor interaction states
+  const [cursorControlMode, setCursorControlMode] = useState('absolute');
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setCursorColor] = useState('blue');
 
@@ -20,13 +21,10 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const [layout, setLayout] = useState("default");
   const [activeTextInput, setActiveTextInput] = useState(null);
   const [keyboardPosition, setKeyboardPosition] = useState({ top: 0, left: 0 });
-  const [keyboardOverlayVisible, setKeyboardOverlayVisible] = useState(false);
   const keyboard = useRef();
 
   //Scroll States
-  const [pageHeight, setPageHeight] = useState(0);
   const [scrollAmt, setScrollAmt] = useState(0);
-  const [currentWindowHeight, setCurrentWindowHeight] = useState(0);
 
   //Keyboard Display customizations
   const customDisplay = {
@@ -45,8 +43,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     overlayDiv.addEventListener('mousedown', handleMouseClick);
     overlayDiv.addEventListener('mouseup', handleMouseRelease);
     window.addEventListener("scroll", handleScroll);
-    setPageHeight(document.body.scrollHeight);
-    setCurrentWindowHeight(window.innerHeight);
 
     return () => {
       overlayDiv.removeEventListener('mousemove', handleMouseMovement);
@@ -102,6 +98,11 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
     handleScroll();
   }, [scrollAmt, cursorTop]);
 
+  useEffect(() => {
+    const deadzone = document.querySelector('.deadzone');
+    (cursorControlMode === 'absolute') ? deadzone.style.display = 'none' : deadzone.style.display = 'block';
+  }, [cursorControlMode])
+
   //Moves the cursor within limitations of window
   const moveCursor = () => {
     const windowWidth = window.innerWidth;
@@ -118,45 +119,57 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   //Controls cursor movement parameters such as speed and direction
   const handleMove = () => {
-    const [direction, magnitude] = cursorDirection;
-    //exponentially scales movement farther you drag
-    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.8);
-    //Easier to move left and right than up and own
-    const upDownMoveDistance = moveDistance * 3;
-    //Cursor Movement Logic
-    if (magnitude) {
-      switch (direction) {
-        case 'up':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          break;
-        case 'down':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          break;
-        case 'left':
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'right':
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        case 'up-left':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'up-right':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        case 'down-left':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'down-right':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        default:
-          break;
+    if (cursorControlMode === 'relative') {
+      const [direction, magnitude] = cursorDirection;
+      //exponentially scales movement farther you drag
+      const moveDistance = cursorStep * Math.pow(magnitude / 2, 2);
+      //Easier to move left and right than up and own
+      const upDownMoveDistance = moveDistance * 4;
+      //Cursor Movement Logic
+      if (magnitude) {
+        switch (direction) {
+          case 'up':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            break;
+          case 'down':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            break;
+          case 'left':
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'right':
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          case 'up-left':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'up-right':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          case 'down-left':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'down-right':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          default:
+            break;
+        }
       }
+    } else if (cursorControlMode === 'absolute') {
+      const [x, y] = avgFacePosition;
+      //scaling factor so you don't have to move your head so far
+      const scalingFactor = 2;
+      const viewCenterX = window.innerWidth / 2;
+      const viewCenterY = window.innerHeight / 2;
+      const offsetY = scalingFactor * 1.4 * viewCenterY * (y - (videoHeight / 2)) / (videoHeight / 2);
+      const offsetX = scalingFactor * viewCenterX * (x - (videoWidth / 2)) / (videoWidth / 2);
+      setCursorTop(viewCenterY + offsetY);
+      setCursorLeft(viewCenterX + offsetX);
     }
   };
 
@@ -166,12 +179,40 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
       const cursorX = cursorLeft + cursorSize / 2;
       const cursorY = cursorTop + cursorSize / 2;
       const radius = 50; // Adjust the radius value as needed
-
       const elements = document.elementsFromPoint(cursorLeft, cursorTop);
+
+      //Checks if cursor is over button or keyboard container
+      const buttonContainer = document.querySelector('.button-container');
+      const isCursorOverButtonContainer =
+        buttonContainer &&
+        cursorX >= buttonContainer.offsetLeft &&
+        cursorX <= buttonContainer.offsetLeft + buttonContainer.offsetWidth &&
+        cursorY >= buttonContainer.offsetTop &&
+        cursorY <= buttonContainer.offsetTop + buttonContainer.offsetHeight;
+
+      const keyboardContainer = (document.querySelector('.keyboard-container')) ? document.querySelector('.keyboard-container').parentNode : null;
+      const isCursorOverKeyboardContainer =
+        keyboardContainer &&
+        cursorX >= keyboardContainer.offsetLeft &&
+        cursorX <= keyboardContainer.offsetLeft + keyboardContainer.offsetWidth &&
+        cursorY >= keyboardContainer.offsetTop &&
+        cursorY <= keyboardContainer.offsetTop + keyboardContainer.offsetHeight;
+
+
       elements.forEach((element) => {
         const elementRect = element.getBoundingClientRect();
         const elementX = elementRect.left + elementRect.width / 2;
         const elementY = elementRect.top + elementRect.height / 2;
+
+
+        //Blocks interaction if the cursor is over the button or keyboard containers and the element is not within them
+        if (isCursorOverButtonContainer && !buttonContainer.contains(element)) {
+          return true;
+        }
+
+        if (isCursorOverKeyboardContainer && !keyboardContainer.contains(element)) {
+          return true;
+        }
 
         //radius of click
         const distance = Math.sqrt(
@@ -183,7 +224,6 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setActiveTextInput(element); // Set the active text input
             setKeyboardVisible(true);
-            setKeyboardOverlayVisible(true);
           } else if (element.getAttribute('data-skbtn')) {
             //Implemented because react-simple-keyboard won't interact with mouth triggered click
             const buttonValue = element.getAttribute('data-skbtn');
@@ -251,86 +291,86 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   }
 
   const handleScroll = () => {
-    // const x = cursorTop;
-    // const y = cursorLeft;
     setScrollAmt(window.scrollY);
-    // console.log('scroll position: ' + scrollAmt);
-    // console.log('window height: ' + document.body.scrollHeight);
-    // console.log('y:' + `${x}`)
   }
 
   const scrollUp = () => {
-    window.scrollBy(0, currentWindowHeight * -0.8);
+    window.scrollBy(0, window.innerHeight * -0.8);
+    setKeyboardVisible(false);
   }
 
   const scrollDown = () => {
-    window.scrollBy(0, currentWindowHeight * 0.8);
+    window.scrollBy(0, window.innerHeight * 0.8);
+    setKeyboardVisible(false);
+  }
+
+  const toggleCursorControlMode = () => {
+    cursorControlMode === 'absolute' ? setCursorControlMode('relative') : setCursorControlMode('absolute');
   }
 
   return (
     <React.Fragment>
       <div className="button-container">
-        <button className="button-56" onClick={scrollUp}>
-          <a class="text">&uarr;</a>
+        <button className="button-56 cursorControl" style={
+          { backgroundColor: cursorControlMode === 'absolute' ? '#DAE9FF' : '#FFDEDA' }
+        } onClick={toggleCursorControlMode}>
+          <a className="text">{cursorControlMode === "absolute" ? 'A' : 'R'}</a>
         </button>
-        <button className="button-56" onClick={scrollDown}>
-          <a class="text">&darr;</a>
+        <button className="button-56 scrollUp" onClick={scrollUp}>
+          <a className="text">&uarr;</a>
         </button>
-
-        <div className="button-overlay" />
-      </div>
-      <div
+        <button className="button-56 scrollDown" onClick={scrollDown}>
+          <a className="text">&darr;</a>
+        </button>
+      </div >
+      < div
         id="overlayDiv"
-        className="overlay">
+        className="overlay" >
         <div
           className="cursor"
           style={{
             width: `${cursorSize}px`,
             height: `${cursorSize}px`,
-            top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
-            left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
+            top: `${cursorTop - cursorSize / 2}px`,
+            left: `${cursorLeft - cursorSize / 2}px`,
             background: `${cursorColor}`
           }}>
         </div>
-        {keyboardVisible && (
-          <div
-            className="keyboard-overlay"
-            style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
-          />
-        )}
-        {keyboardVisible ? (
-          <div
-            style={{
-              position: 'fixed',
-              top: `${keyboardPosition.top}px`,
-              left: `${keyboardPosition.left}px`,
-            }}
-          >
-            <div className="keyboard-container">
-              <Keyboard
-                keyboardRef={r => (keyboard.current = r)}
-                theme={"hg-theme-default hg-layout-default myTheme"}
-                layoutName={layout}
-                onKeyPress={handleKeyPress}
-                display={customDisplay}
-                buttonTheme={[
-                  {
-                    class: "hg-red",
-                    buttons: "{tab}"
-                  },
-                  {
-                    class: "hg-green",
-                    buttons: "{enter}"
-                  },
-                  {
-                    class: "hg-yellow",
-                    buttons: "{lock}"
-                  }
-                ]}
-              />
+
+        {
+          keyboardVisible ? (
+            <div
+              style={{
+                position: 'fixed',
+                top: `${keyboardPosition.top}px`,
+                left: `${keyboardPosition.left}px`,
+              }}
+            >
+              <div className="keyboard-container">
+                <Keyboard
+                  keyboardRef={r => (keyboard.current = r)}
+                  theme={"hg-theme-default hg-layout-default myTheme"}
+                  layoutName={layout}
+                  onKeyPress={handleKeyPress}
+                  display={customDisplay}
+                  buttonTheme={[
+                    {
+                      class: "hg-red",
+                      buttons: "{tab}"
+                    },
+                    {
+                      class: "hg-green",
+                      buttons: "{enter}"
+                    },
+                    {
+                      class: "hg-yellow",
+                      buttons: "{lock}"
+                    }
+                  ]}
+                />
+              </div>
             </div>
-          </div>
-        ) : <></>
+          ) : <></>
         }
       </div>
     </React.Fragment >

@@ -11,7 +11,7 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
   const cursorStep = 0.07; // Adjust this value to change cursor movement speed
 
   //Cursor interaction states
-  const [cursorControlMode, setCursorControlMode] = useState('relative');
+  const [cursorControlMode, setCursorControlMode] = useState('absolute');
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setCursorColor] = useState('blue');
 
@@ -163,10 +163,13 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
     } else if (cursorControlMode === 'absolute') {
       const [x, y] = avgFacePosition;
       //scaling factor so you don't have to move your head so far
-      // const adjustedX = ;
-      // const adjustedY = ;
-      setCursorTop(y / videoHeight * window.innerHeight);
-      setCursorLeft(x / videoWidth * window.innerWidth);
+      const scalingFactor = 2;
+      const viewCenterX = window.innerWidth / 2;
+      const viewCenterY = window.innerHeight / 2;
+      const offsetY = scalingFactor * 1.4 * viewCenterY * (y - (videoHeight / 2)) / (videoHeight / 2);
+      const offsetX = scalingFactor * viewCenterX * (x - (videoWidth / 2)) / (videoWidth / 2);
+      setCursorTop(viewCenterY + offsetY);
+      setCursorLeft(viewCenterX + offsetX);
     }
   };
 

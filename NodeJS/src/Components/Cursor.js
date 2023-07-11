@@ -21,13 +21,10 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
   const [layout, setLayout] = useState("default");
   const [activeTextInput, setActiveTextInput] = useState(null);
   const [keyboardPosition, setKeyboardPosition] = useState({ top: 0, left: 0 });
-  const [keyboardOverlayVisible, setKeyboardOverlayVisible] = useState(false);
   const keyboard = useRef();
 
   //Scroll States
-  const [pageHeight, setPageHeight] = useState(0);
   const [scrollAmt, setScrollAmt] = useState(0);
-  const [currentWindowHeight, setCurrentWindowHeight] = useState(0);
 
   //Keyboard Display customizations
   const customDisplay = {
@@ -46,8 +43,6 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
     overlayDiv.addEventListener('mousedown', handleMouseClick);
     overlayDiv.addEventListener('mouseup', handleMouseRelease);
     window.addEventListener("scroll", handleScroll);
-    setPageHeight(document.body.scrollHeight);
-    setCurrentWindowHeight(window.innerHeight);
 
     return () => {
       overlayDiv.removeEventListener('mousemove', handleMouseMovement);
@@ -196,7 +191,6 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setActiveTextInput(element); // Set the active text input
             setKeyboardVisible(true);
-            setKeyboardOverlayVisible(true);
           } else if (element.getAttribute('data-skbtn')) {
             //Implemented because react-simple-keyboard won't interact with mouth triggered click
             const buttonValue = element.getAttribute('data-skbtn');
@@ -268,12 +262,12 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
   }
 
   const scrollUp = () => {
-    window.scrollBy(0, currentWindowHeight * -0.8);
+    window.scrollBy(0, window.innerHeight * -0.8);
     setKeyboardVisible(false);
   }
 
   const scrollDown = () => {
-    window.scrollBy(0, currentWindowHeight * 0.8);
+    window.scrollBy(0, window.innerHeight * 0.8);
     setKeyboardVisible(false);
   }
 
@@ -283,8 +277,8 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
 
   return (
     <React.Fragment>
-      <div className="scroll-button-container">
-        <button className="button-56" style={
+      <div className="button-container">
+        <button className="button-56 cursorControl" style={
           { backgroundColor: cursorControlMode === 'absolute' ? '#dafbff' : '#111', color: cursorControlMode === 'absolute' ? '#111' : "#dafbff" }
         } onClick={toggleCursorControlMode}>
           <a className="text">{cursorControlMode === "absolute" ? 'A' : 'R'}</a>
@@ -304,19 +298,12 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
           style={{
             width: `${cursorSize}px`,
             height: `${cursorSize}px`,
-            top: `${cursorTop - cursorSize / 2}px`, // Subtract half of cursorSize
-            left: `${cursorLeft - cursorSize / 2}px`, // Subtract half of cursorSize
+            top: `${cursorTop - cursorSize / 2}px`,
+            left: `${cursorLeft - cursorSize / 2}px`,
             background: `${cursorColor}`
           }}>
         </div>
-        {
-          keyboardVisible && (
-            <div
-              className="keyboard-overlay"
-              style={{ display: keyboardOverlayVisible ? 'block' : 'none' }}
-            />
-          )
-        }
+
         {
           keyboardVisible ? (
             <div

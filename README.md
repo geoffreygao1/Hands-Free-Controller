@@ -8,8 +8,10 @@ _An accessibility application that allows for hands-free control of a web browse
 ## Getting Started
 ![Labeled Functions](https://imgur.com/oz3nWZ2.jpg)
 ### Webcam Input
+***
 _The application requires usage of a webcam in order to function. You will be prompted to allow access to the webcam when the application starts. You can confirm that the webcam is correctly functioning by the webcam display in the top right of the application. The facial recognition package should also overlay the face landmark prediction over your image [1]. For proper functionality, please use the application in a well-lit environment with minimal background noise (esp. other faces)._
 ### Cursor Control Modes
+***
 _The cursor is controlled based on the location of the face relative to the webcam input. Clicking functionality is enabled when the user opens their mouth (widely). An indicator of a click is when the blue cursor [2] turns to red.  There are two different control schemes for movement of the cursor: Absolute and Relative mode. The two modes can be toggled between using the Cursor Control Mode button [3]._
 #### Absolute Control Mode
 _Absolute Control Mode moves the cursor to the position of the user's head. For example, if the user's head is located in the top right of the webcam input, the cursor will be be in the same approximate position in the web page. This is the default setting for the cursor control._
@@ -17,12 +19,15 @@ _Absolute Control Mode moves the cursor to the position of the user's head. For 
 ![Relative Control Diagram](https://imgur.com/HwkUd54.jpg)
 _Relative Control Mode utilizes motion control similar to how a game controller joystick would function. At the center of the webcam is a "deadzone". If the center of the user's face is in the deadzone, the cursor will not move. If the user moves their face out of the deadzone, the cursor will move in that relative direction. The webcam input is divided into 8 sections, each corresponding with a direction of movement (e.g., up, down-right, left, etc.). The magnitude of the cursor movement is determined by the distance away from the deadzone (i.e., the farther out the user moves their head, the faster the cursor will move in that direction)._
 ### Scroll Buttons
+***
 _For long web pages, the user can scroll up and down a web page using the two scroll buttons [4]. The user should interact with these buttons as they would any other page elements (i.e., opening and closing their mouth)._
 ### Virtual Keyboard
+***
 ![Virtual Keyboard Screenshot](https://imgur.com/WysV2yz.jpg)
 
 ## Setup/Installation Requirements
 ### Chrome Extension
+***
 
 ![Chrome Extension Installation Diagram](https://imgur.com/hJ3iC3f.jpg)
 
@@ -42,6 +47,7 @@ _Note: The extension files can be rebuilt if any modifications are to be made. T
   
 
 ### NodeJS
+***
 
 *  _Clone the repository and navigate into the `NodeJS` folder_
 

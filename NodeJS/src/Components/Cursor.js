@@ -220,7 +220,6 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
         );
 
         if (distance <= radius) {
-
           //Checks if element is an text input to open keyboard
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setActiveTextInput(element); // Set the active text input
@@ -373,7 +372,7 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
             </div>
           ) : <></>
         }
-      </div >
+      </div>
     </React.Fragment >
   );
 };

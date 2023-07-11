@@ -3,7 +3,7 @@ import { KeyboardReact as Keyboard } from "react-simple-keyboard";
 import './App.css';
 import "react-simple-keyboard/build/css/index.css";
 
-const Cursor = ({ cursorDirection, mouthOpen }) => {
+const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, videoHeight }) => {
   //Cursor Position and movement states
   const [cursorTop, setCursorTop] = useState(window.innerHeight / 2);
   const [cursorLeft, setCursorLeft] = useState(window.innerWidth / 2);
@@ -11,6 +11,7 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   const cursorStep = 0.07; // Adjust this value to change cursor movement speed
 
   //Cursor interaction states
+  const [cursorControlMode, setCursorControlMode] = useState('relative');
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [cursorColor, setCursorColor] = useState('blue');
 
@@ -118,45 +119,54 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
 
   //Controls cursor movement parameters such as speed and direction
   const handleMove = () => {
-    const [direction, magnitude] = cursorDirection;
-    //exponentially scales movement farther you drag
-    const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.8);
-    //Easier to move left and right than up and own
-    const upDownMoveDistance = moveDistance * 3;
-    //Cursor Movement Logic
-    if (magnitude) {
-      switch (direction) {
-        case 'up':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          break;
-        case 'down':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          break;
-        case 'left':
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'right':
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        case 'up-left':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'up-right':
-          setCursorTop((prevTop) => prevTop - upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        case 'down-left':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft - moveDistance);
-          break;
-        case 'down-right':
-          setCursorTop((prevTop) => prevTop + upDownMoveDistance);
-          setCursorLeft((prevLeft) => prevLeft + moveDistance);
-          break;
-        default:
-          break;
+    if (cursorControlMode === 'relative') {
+      const [direction, magnitude] = cursorDirection;
+      //exponentially scales movement farther you drag
+      const moveDistance = cursorStep * Math.pow(magnitude / 2, 1.8);
+      //Easier to move left and right than up and own
+      const upDownMoveDistance = moveDistance * 3;
+      //Cursor Movement Logic
+      if (magnitude) {
+        switch (direction) {
+          case 'up':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            break;
+          case 'down':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            break;
+          case 'left':
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'right':
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          case 'up-left':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'up-right':
+            setCursorTop((prevTop) => prevTop - upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          case 'down-left':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft - moveDistance);
+            break;
+          case 'down-right':
+            setCursorTop((prevTop) => prevTop + upDownMoveDistance);
+            setCursorLeft((prevLeft) => prevLeft + moveDistance);
+            break;
+          default:
+            break;
+        }
       }
+    } else if (cursorControlMode === 'absolute') {
+      const [x, y] = avgFacePosition;
+      //scaling factor so you don't have to move your head so far
+      // const adjustedX = ;
+      // const adjustedY = ;
+      setCursorTop(y / videoHeight * window.innerHeight);
+      setCursorLeft(x / videoWidth * window.innerWidth);
     }
   };
 
@@ -251,34 +261,41 @@ const Cursor = ({ cursorDirection, mouthOpen }) => {
   }
 
   const handleScroll = () => {
-    // const x = cursorTop;
-    // const y = cursorLeft;
     setScrollAmt(window.scrollY);
-    // console.log('scroll position: ' + scrollAmt);
-    // console.log('window height: ' + document.body.scrollHeight);
-    // console.log('y:' + `${x}`)
   }
 
   const scrollUp = () => {
     window.scrollBy(0, currentWindowHeight * -0.8);
+    setKeyboardVisible(false);
   }
 
   const scrollDown = () => {
     window.scrollBy(0, currentWindowHeight * 0.8);
+    setKeyboardVisible(false);
+  }
+
+  const toggleCursorControlMode = () => {
+    cursorControlMode === 'absolute' ? setCursorControlMode('relative') : setCursorControlMode('absolute');
   }
 
   return (
     <React.Fragment>
-      <div className="button-container">
+      <div className="scroll-button-container">
         <button className="button-56" onClick={scrollUp}>
-          <a class="text">&uarr;</a>
+          <a className="text">&uarr;</a>
         </button>
         <button className="button-56" onClick={scrollDown}>
-          <a class="text">&darr;</a>
+          <a className="text">&darr;</a>
         </button>
-
-        <div className="button-overlay" />
       </div>
+
+      <div className="controlToggle-button-container">
+        <input className="tgl tgl-flip" id="cb5" type="checkbox" onClick={toggleCursorControlMode} />
+        <label className="tgl-btn" data-tg-off="Absolute" data-tg-on="Relative" htmlFor="cb5"></label>
+      </div>
+
+
+
       <div
         id="overlayDiv"
         className="overlay">

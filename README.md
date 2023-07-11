@@ -42,7 +42,7 @@ Copyright (c) _2023_ _Geoffrey Gao_
 ### _Near Term To Do List:_
   * _Improve face interpretation for movement_
   * _Clean up state, currently too many vairables_
-  * _Cursor Control_
+  * _Improve look_
 
 #### Thursday 06/15/23
 * _10:00AM Intiialized Repo and organized resources_
@@ -93,3 +93,6 @@ Copyright (c) _2023_ _Geoffrey Gao_
 
 #### Sunday 07/09/23
 * _Updated Chrome Extension Version_
+
+#### Monday 07/10/23
+* _Implemented second move type for cursor_ 

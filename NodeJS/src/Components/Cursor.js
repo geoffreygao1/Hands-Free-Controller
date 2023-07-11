@@ -174,12 +174,40 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
       const cursorX = cursorLeft + cursorSize / 2;
       const cursorY = cursorTop + cursorSize / 2;
       const radius = 50; // Adjust the radius value as needed
-
       const elements = document.elementsFromPoint(cursorLeft, cursorTop);
+
+      //Checks if cursor is over button or keyboard container
+      const buttonContainer = document.querySelector('.button-container');
+      const isCursorOverButtonContainer =
+        buttonContainer &&
+        cursorX >= buttonContainer.offsetLeft &&
+        cursorX <= buttonContainer.offsetLeft + buttonContainer.offsetWidth &&
+        cursorY >= buttonContainer.offsetTop &&
+        cursorY <= buttonContainer.offsetTop + buttonContainer.offsetHeight;
+
+      const keyboardContainer = (document.querySelector('.keyboard-container')) ? document.querySelector('.keyboard-container').parentNode : null;
+      const isCursorOverKeyboardContainer =
+        keyboardContainer &&
+        cursorX >= keyboardContainer.offsetLeft &&
+        cursorX <= keyboardContainer.offsetLeft + keyboardContainer.offsetWidth &&
+        cursorY >= keyboardContainer.offsetTop &&
+        cursorY <= keyboardContainer.offsetTop + keyboardContainer.offsetHeight;
+
+
       elements.forEach((element) => {
         const elementRect = element.getBoundingClientRect();
         const elementX = elementRect.left + elementRect.width / 2;
         const elementY = elementRect.top + elementRect.height / 2;
+
+
+        //Blocks interaction if the cursor is over the button or keyboard containers and the element is not within them
+        if (isCursorOverButtonContainer && !buttonContainer.contains(element)) {
+          return true;
+        }
+
+        if (isCursorOverKeyboardContainer && !keyboardContainer.contains(element)) {
+          return true;
+        }
 
         //radius of click
         const distance = Math.sqrt(
@@ -187,6 +215,7 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
         );
 
         if (distance <= radius) {
+
           //Checks if element is an text input to open keyboard
           if (element.tagName === 'INPUT' && element.getAttribute('type') === 'text') {
             setActiveTextInput(element); // Set the active text input
@@ -279,7 +308,7 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
     <React.Fragment>
       <div className="button-container">
         <button className="button-56 cursorControl" style={
-          { backgroundColor: cursorControlMode === 'absolute' ? '#dafbff' : '#111', color: cursorControlMode === 'absolute' ? '#111' : "#dafbff" }
+          { backgroundColor: cursorControlMode === 'absolute' ? '#DAE9FF' : '#555555', color: cursorControlMode === 'absolute' ? '#111' : '#DAE9FF' }
         } onClick={toggleCursorControlMode}>
           <a className="text">{cursorControlMode === "absolute" ? 'A' : 'R'}</a>
         </button>

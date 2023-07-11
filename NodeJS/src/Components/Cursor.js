@@ -98,6 +98,11 @@ const Cursor = ({ cursorDirection, mouthOpen, avgFacePosition, videoWidth, video
     handleScroll();
   }, [scrollAmt, cursorTop]);
 
+  useEffect(() => {
+    const deadzone = document.querySelector('.deadzone');
+    (cursorControlMode === 'absolute') ? deadzone.style.display = 'none' : deadzone.style.display = 'block';
+  }, [cursorControlMode])
+
   //Moves the cursor within limitations of window
   const moveCursor = () => {
     const windowWidth = window.innerWidth;

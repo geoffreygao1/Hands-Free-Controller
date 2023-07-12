@@ -54,6 +54,8 @@ _Note: The extension files can be rebuilt if any modifications are to be made. T
 
 *  _Run the application using `npm run start`_
 
+_Note: The web page is injected as a `HTML` component (this was implemented for testing purposes). If running your own application, the HTML.js will need to be modified_
+
 ## Technologies Used
 *  _JavaScript/React_
 	*  _[face-api.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)_

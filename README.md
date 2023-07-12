@@ -16,21 +16,21 @@ _The cursor is controlled based on the location of the face relative to the webc
 #### Absolute Control Mode
 _Absolute Control Mode moves the cursor to the position of the user's head. For example, if the user's head is located in the top right of the webcam input, the cursor will be be in the same approximate position in the web page. This is the default setting for the cursor control._
 #### Relative Control Mode
-![Relative Control Diagram](https://imgur.com/HwkUd54.jpg)
 _Relative Control Mode utilizes motion control similar to how a game controller joystick would function. At the center of the webcam is a "deadzone". If the center of the user's face is in the deadzone, the cursor will not move. If the user moves their face out of the deadzone, the cursor will move in that relative direction. The webcam input is divided into 8 sections, each corresponding with a direction of movement (e.g., up, down-right, left, etc.). The magnitude of the cursor movement is determined by the distance away from the deadzone (i.e., the farther out the user moves their head, the faster the cursor will move in that direction)._
+
+![Relative Control Diagram](https://imgur.com/HwkUd54.jpg)
 ### Scroll Buttons
 ***
 _For long web pages, the user can scroll up and down a web page using the two scroll buttons [4]. The user should interact with these buttons as they would any other page elements (i.e., opening and closing their mouth)._
 ### Virtual Keyboard
 ***
+_Text forms can be filled in this application using a virtual keyboard. Simply interact with a text input element (i.e., opening and closing mouth) to open the virtual keyboard. Note: Currently the virtual keyboard functionality only works with websites that have implemented text inputs as HTML input elements._
+
 ![Virtual Keyboard Screenshot](https://imgur.com/WysV2yz.jpg)
 
 ## Setup/Installation Requirements
 ### Chrome Extension
 ***
-
-![Chrome Extension Installation Diagram](https://imgur.com/hJ3iC3f.jpg)
-
 *  _Clone the repository and locate the folder `extension` within the `Chrome Extension` folder_
 
 *  _Open Google Chrome and navigate to `Chrome://Extensions` in the address bar_
@@ -40,10 +40,9 @@ _For long web pages, the user can scroll up and down a web page using the two sc
 *  _Click on the button on the top left of the page that says "Load unpacked". Then select the location of the `extension` folder [2]_
 * _Confirm the extension is loaded [3]_
 
-  
-
 _Note: The extension files can be rebuilt if any modifications are to be made. The source code can be found in the `handsfreecontroller` folder. The depdencies will need to be installed using `npm install`. The `content.js` file can be regenerated using `npm run build` in the terminal_
 
+![Chrome Extension Installation Diagram](https://imgur.com/hJ3iC3f.jpg)
   
 
 ### NodeJS
